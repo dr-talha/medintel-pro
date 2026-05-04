@@ -1,0 +1,57 @@
+<svg width="320" height="90" viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <linearGradient id="gradAnim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#0066ff"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ICON -->
+  <g transform="translate(10,10)">
+
+    <!-- Glow Pulse -->
+    <circle cx="38" cy="45" r="20" fill="#00f0ff" opacity="0.15">
+      <animate attributeName="r" values="18;24;18" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.1;0.3;0.1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Medical Cross -->
+    <rect x="32" y="25" width="12" height="40" rx="3" fill="url(#gradAnim)">
+      <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="20" y="37" width="36" height="12" rx="3" fill="url(#gradAnim)">
+      <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
+    </rect>
+
+    <!-- AI Nodes -->
+    <circle cx="26" cy="30" r="3" fill="#00f0ff">
+      <animate attributeName="cy" values="30;26;30" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <circle cx="54" cy="50" r="3" fill="#0066ff">
+      <animate attributeName="cy" values="50;54;50" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Connecting Lines -->
+    <line x1="26" y1="30" x2="38" y2="45" stroke="#00f0ff" stroke-width="1.5">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+    </line>
+
+    <line x1="54" y1="50" x2="38" y2="45" stroke="#0066ff" stroke-width="1.5">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+    </line>
+
+  </g>
+
+  <!-- TEXT -->
+  <text x="90" y="42" font-family="Inter, Segoe UI, Arial" font-size="24" fill="#0a0a0a" font-weight="600">
+    MedIntel
+  </text>
+
+  <text x="90" y="68" font-family="Inter, Segoe UI, Arial" font-size="16" fill="#0066ff">
+    Pro
+  </text>
+
+</svg>
