@@ -1,56 +1,48 @@
-<svg width="320" height="90" viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg">
+<svg width="340" height="100" viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg">
 
   <defs>
-    <linearGradient id="gradAnim" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff"/>
-      <stop offset="100%" stop-color="#0066ff"/>
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00eaff"/>
+      <stop offset="100%" stop-color="#0057ff"/>
     </linearGradient>
   </defs>
 
   <!-- ICON -->
-  <g transform="translate(10,10)">
+  <g transform="translate(20,20)">
 
-    <!-- Glow Pulse -->
-    <circle cx="38" cy="45" r="20" fill="#00f0ff" opacity="0.15">
-      <animate attributeName="r" values="18;24;18" dur="2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.1;0.3;0.1" dur="2s" repeatCount="indefinite"/>
-    </circle>
+    <!-- Animated M Stroke -->
+    <path d="M0 60 L15 10 L30 40 L45 10 L60 60" 
+          fill="none" stroke="url(#mainGrad)" stroke-width="4" stroke-linecap="round"
+          stroke-dasharray="200"
+          stroke-dashoffset="200">
+      <animate attributeName="stroke-dashoffset" from="200" to="0" dur="1.5s" fill="freeze"/>
+    </path>
 
-    <!-- Medical Cross -->
-    <rect x="32" y="25" width="12" height="40" rx="3" fill="url(#gradAnim)">
-      <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
-    </rect>
-
-    <rect x="20" y="37" width="36" height="12" rx="3" fill="url(#gradAnim)">
-      <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
-    </rect>
+    <!-- Pulse Line Animation -->
+    <polyline points="0,35 10,35 15,20 20,50 30,25 40,35 60,35"
+              fill="none" stroke="#00eaff" stroke-width="2"
+              stroke-dasharray="100"
+              stroke-dashoffset="100">
+      <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1.8s" repeatCount="indefinite"/>
+    </polyline>
 
     <!-- AI Nodes -->
-    <circle cx="26" cy="30" r="3" fill="#00f0ff">
-      <animate attributeName="cy" values="30;26;30" dur="1.5s" repeatCount="indefinite"/>
+    <circle cx="30" cy="25" r="4" fill="#0057ff">
+      <animate attributeName="r" values="4;6;4" dur="1.5s" repeatCount="indefinite"/>
     </circle>
 
-    <circle cx="54" cy="50" r="3" fill="#0066ff">
-      <animate attributeName="cy" values="50;54;50" dur="1.5s" repeatCount="indefinite"/>
+    <circle cx="45" cy="10" r="3" fill="#00eaff">
+      <animate attributeName="opacity" values="1;0.4;1" dur="1.5s" repeatCount="indefinite"/>
     </circle>
-
-    <!-- Connecting Lines -->
-    <line x1="26" y1="30" x2="38" y2="45" stroke="#00f0ff" stroke-width="1.5">
-      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
-    </line>
-
-    <line x1="54" y1="50" x2="38" y2="45" stroke="#0066ff" stroke-width="1.5">
-      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
-    </line>
 
   </g>
 
   <!-- TEXT -->
-  <text x="90" y="42" font-family="Inter, Segoe UI, Arial" font-size="24" fill="#0a0a0a" font-weight="600">
+  <text x="110" y="48" font-family="Inter, Arial" font-size="28" fill="#0a0a0a" font-weight="600">
     MedIntel
   </text>
 
-  <text x="90" y="68" font-family="Inter, Segoe UI, Arial" font-size="16" fill="#0066ff">
+  <text x="110" y="75" font-family="Inter, Arial" font-size="16" fill="#0057ff">
     Pro
   </text>
 
