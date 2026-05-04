@@ -1,48 +1,98 @@
-<svg width="340" height="100" viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg">
+<svg width="360" height="110" viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg">
 
   <defs>
+    <!-- Gradient -->
     <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#00eaff"/>
       <stop offset="100%" stop-color="#0057ff"/>
     </linearGradient>
+
+    <!-- Glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
 
-  <!-- ICON -->
-  <g transform="translate(20,20)">
+  <!-- ICON GROUP -->
+  <g transform="translate(20,20)" filter="url(#glow)">
 
-    <!-- Animated M Stroke -->
-    <path d="M0 60 L15 10 L30 40 L45 10 L60 60" 
-          fill="none" stroke="url(#mainGrad)" stroke-width="4" stroke-linecap="round"
-          stroke-dasharray="200"
-          stroke-dashoffset="200">
-      <animate attributeName="stroke-dashoffset" from="200" to="0" dur="1.5s" fill="freeze"/>
-    </path>
-
-    <!-- Pulse Line Animation -->
-    <polyline points="0,35 10,35 15,20 20,50 30,25 40,35 60,35"
-              fill="none" stroke="#00eaff" stroke-width="2"
-              stroke-dasharray="100"
-              stroke-dashoffset="100">
-      <animate attributeName="stroke-dashoffset" from="100" to="0" dur="1.8s" repeatCount="indefinite"/>
-    </polyline>
-
-    <!-- AI Nodes -->
-    <circle cx="30" cy="25" r="4" fill="#0057ff">
-      <animate attributeName="r" values="4;6;4" dur="1.5s" repeatCount="indefinite"/>
+    <!-- ROTATING AI RING -->
+    <circle cx="40" cy="40" r="30"
+            fill="none"
+            stroke="url(#mainGrad)"
+            stroke-width="1.5"
+            stroke-dasharray="4 6"
+            opacity="0.5">
+      <animateTransform attributeName="transform"
+                        type="rotate"
+                        from="0 40 40"
+                        to="360 40 40"
+                        dur="12s"
+                        repeatCount="indefinite"/>
     </circle>
 
+    <!-- INNER SOFT GLOW -->
+    <circle cx="40" cy="40" r="22"
+            fill="#00eaff"
+            opacity="0.08">
+      <animate attributeName="r" values="22;25;22" dur="3s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- M SHAPE -->
+    <path d="M0 60 L15 10 L30 40 L45 10 L60 60"
+          fill="none"
+          stroke="url(#mainGrad)"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-dasharray="200"
+          stroke-dashoffset="200">
+      <animate attributeName="stroke-dashoffset"
+               values="200;0;0;200"
+               dur="4s"
+               repeatCount="indefinite"/>
+    </path>
+
+    <!-- ECG LINE -->
+    <polyline points="0,35 10,35 15,20 20,50 30,25 40,35 60,35"
+              fill="none"
+              stroke="#00eaff"
+              stroke-width="2"
+              stroke-dasharray="6 6">
+      <animate attributeName="stroke-dashoffset"
+               values="0;-60"
+               dur="2s"
+               repeatCount="indefinite"/>
+    </polyline>
+
+    <!-- AI NODE 1 -->
+    <circle cx="30" cy="25" r="4" fill="#0057ff">
+      <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- AI NODE 2 -->
     <circle cx="45" cy="10" r="3" fill="#00eaff">
-      <animate attributeName="opacity" values="1;0.4;1" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
     </circle>
 
   </g>
 
   <!-- TEXT -->
-  <text x="110" y="48" font-family="Inter, Arial" font-size="28" fill="#0a0a0a" font-weight="600">
+  <text x="110" y="50"
+        font-family="Inter, Arial"
+        font-size="28"
+        fill="#0a0a0a"
+        font-weight="600">
     MedIntel
   </text>
 
-  <text x="110" y="75" font-family="Inter, Arial" font-size="16" fill="#0057ff">
+  <text x="110" y="78"
+        font-family="Inter, Arial"
+        font-size="16"
+        fill="#0057ff">
     Pro
   </text>
 
