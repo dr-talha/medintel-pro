@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Medical quiz system — 15,000+ questions across pharmacology, clinical medicine, anatomy, nursing, USMLE prep and more. Free, unlimited.">
+  <title>Medical Quiz — MedIntel Pro</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/quiz.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect width="28" height="28" rx="6" fill="var(--accent)"/><path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="nav__logo-text">MedIntel<span class="nav__logo-pro">Pro</span></span></a>
+    <ul class="nav__links" role="list">
+      <li><a href="/drugs.html" class="nav__link">Drugs</a></li>
+      <li><a href="/calculators.html" class="nav__link">Calc</a></li>
+      <li><a href="/first-aid.html" class="nav__link nav__link--alert">First Aid</a></li>
+      <li><a href="/quiz.html" class="nav__link nav__link--active" aria-current="page">Quiz</a></li>
+      <li><a href="/disease-map.html" class="nav__link">Map</a></li>
+      <li><a href="/blog.html" class="nav__link">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="nav__theme-btn" id="theme-toggle" aria-label="Toggle theme"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-sun" aria-hidden="true"><circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-moon" aria-hidden="true"><path d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5z" stroke="currentColor" stroke-width="1.5"/></svg></button>
+      <a href="/profile.html" class="btn btn--ghost btn--sm" id="nav-auth-btn">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <!-- ── QUIZ HUB (shown by default) ── -->
+  <div id="quiz-hub">
+    <div class="page-header page-header--centered">
+      <div>
+        <h1 class="page-title">Medical Quiz</h1>
+        <p class="page-subtitle">15,400+ questions · 10 specialties · 7 modes · All free · No login needed</p>
+      </div>
+      <!-- Daily challenge -->
+      <div class="daily-challenge-banner" id="daily-challenge-banner">
+        <div class="daily-challenge-banner__inner">
+          <span class="badge badge--live">Today's challenge</span>
+          <strong>10 Questions · Pharmacology</strong>
+          <span class="daily-challenge-banner__streak" id="streak-counter" hidden>🔥 <span>0</span> day streak</span>
+        </div>
+        <button class="btn btn--accent" onclick="startDailyChallenge()">Start Challenge →</button>
+      </div>
+    </div>
+
+    <!-- QUIZ MODE SELECTOR -->
+    <div class="container">
+      <section aria-labelledby="mode-heading">
+        <h2 id="mode-heading" class="section-title">Choose a mode</h2>
+        <div class="quiz-mode-grid">
+
+          <button class="quiz-mode-card" onclick="selectMode('practice')" aria-label="Practice mode — immediate feedback">
+            <div class="quiz-mode-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="var(--accent)" stroke-width="1.5"/><path d="M10 16l4 4 8-8" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="quiz-mode-card__name">Practice</h3>
+            <p class="quiz-mode-card__desc">Immediate feedback + full explanations. Great for studying.</p>
+            <span class="quiz-mode-card__tag">Unlimited · All levels</span>
+          </button>
+
+          <button class="quiz-mode-card" onclick="selectMode('timed')" aria-label="Timed exam mode — USMLE NCLEX style">
+            <div class="quiz-mode-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="12" stroke="var(--accent)" stroke-width="1.5"/><path d="M16 10v6l4 3" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="quiz-mode-card__name">Timed Exam</h3>
+            <p class="quiz-mode-card__desc">USMLE, PLAB, NCLEX, NAPLEX-style. Strict time limits.</p>
+            <span class="quiz-mode-card__tag">Exam simulation</span>
+          </button>
+
+          <button class="quiz-mode-card" onclick="selectMode('adaptive')" aria-label="Adaptive mode — spaced repetition">
+            <div class="quiz-mode-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 24L12 14l4 6 4-10 6 8" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="quiz-mode-card__name">Adaptive</h3>
+            <p class="quiz-mode-card__desc">Spaced repetition. Weak topics resurface more. Gets smarter over time.</p>
+            <span class="quiz-mode-card__tag">Requires free account</span>
+          </button>
+
+          <button class="quiz-mode-card" onclick="selectMode('cme')" aria-label="CME mode — continuing medical education">
+            <div class="quiz-mode-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="8" width="20" height="16" rx="2" stroke="var(--accent)" stroke-width="1.5"/><path d="M11 14h10M11 18h6" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/><path d="M16 4v4" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <h3 class="quiz-mode-card__name">CME</h3>
+            <p class="quiz-mode-card__desc">25–50 question structured modules. Certificate on completion.</p>
+            <span class="quiz-mode-card__tag">Free certificate</span>
+          </button>
+
+          <button class="quiz-mode-card" onclick="selectMode('challenge')" aria-label="Daily challenge — 10 questions global leaderboard">
+            <div class="quiz-mode-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 4l2.47 7.6H26l-6.18 4.49 2.36 7.25L16 19.1l-6.18 4.24 2.36-7.25L6 11.6h7.53L16 4z" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="quiz-mode-card__name">Daily Challenge</h3>
+            <p class="quiz-mode-card__desc">10 questions daily. Global leaderboard. Share your result.</p>
+            <span class="quiz-mode-card__tag">Leaderboard</span>
+          </button>
+
+          <button class="quiz-mode-card" onclick="selectMode('custom')" aria-label="Custom quiz builder">
+            <div class="quiz-mode-card__icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="8" height="8" rx="2" stroke="var(--accent)" stroke-width="1.5"/><rect x="18" y="6" width="8" height="8" rx="2" stroke="var(--accent)" stroke-width="1.5"/><rect x="6" y="18" width="8" height="8" rx="2" stroke="var(--accent)" stroke-width="1.5"/><rect x="18" y="18" width="8" height="8" rx="2" stroke="var(--accent)" stroke-width="1.5"/></svg>
+            </div>
+            <h3 class="quiz-mode-card__name">Custom Quiz</h3>
+            <p class="quiz-mode-card__desc">Pick topics, difficulty, question count. Save sets. Share with peers.</p>
+            <span class="quiz-mode-card__tag">Build your own</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- SPECIALTY SELECTOR -->
+      <section aria-labelledby="specialty-heading" style="margin-top:2.5rem">
+        <h2 id="specialty-heading" class="section-title">Choose specialty</h2>
+        <div class="specialty-grid">
+          <button class="specialty-card specialty-card--active" data-specialty="all">
+            <span class="specialty-card__name">All specialties</span>
+            <span class="specialty-card__count">15,400+</span>
+          </button>
+          <button class="specialty-card" data-specialty="pharmacology">
+            <span class="specialty-card__icon" aria-hidden="true">💊</span>
+            <span class="specialty-card__name">Pharmacology</span>
+            <span class="specialty-card__count">2,400</span>
+          </button>
+          <button class="specialty-card" data-specialty="clinical">
+            <span class="specialty-card__icon" aria-hidden="true">🩺</span>
+            <span class="specialty-card__name">Clinical Medicine</span>
+            <span class="specialty-card__count">3,000</span>
+          </button>
+          <button class="specialty-card" data-specialty="anatomy">
+            <span class="specialty-card__icon" aria-hidden="true">🦴</span>
+            <span class="specialty-card__name">Anatomy</span>
+            <span class="specialty-card__count">1,800</span>
+          </button>
+          <button class="specialty-card" data-specialty="pathology">
+            <span class="specialty-card__icon" aria-hidden="true">🔬</span>
+            <span class="specialty-card__name">Pathology</span>
+            <span class="specialty-card__count">1,500</span>
+          </button>
+          <button class="specialty-card" data-specialty="microbiology">
+            <span class="specialty-card__icon" aria-hidden="true">🦠</span>
+            <span class="specialty-card__name">Microbiology</span>
+            <span class="specialty-card__count">1,200</span>
+          </button>
+          <button class="specialty-card" data-specialty="emergency">
+            <span class="specialty-card__icon" aria-hidden="true">🚨</span>
+            <span class="specialty-card__name">Emergency Med</span>
+            <span class="specialty-card__count">800</span>
+          </button>
+          <button class="specialty-card" data-specialty="nursing">
+            <span class="specialty-card__icon" aria-hidden="true">💉</span>
+            <span class="specialty-card__name">Nursing</span>
+            <span class="specialty-card__count">2,000</span>
+          </button>
+          <button class="specialty-card" data-specialty="pharmacy">
+            <span class="specialty-card__icon" aria-hidden="true">⚗️</span>
+            <span class="specialty-card__name">Pharmacy</span>
+            <span class="specialty-card__count">1,600</span>
+          </button>
+          <button class="specialty-card" data-specialty="public-health">
+            <span class="specialty-card__icon" aria-hidden="true">🌍</span>
+            <span class="specialty-card__name">Public Health</span>
+            <span class="specialty-card__count">800</span>
+          </button>
+        </div>
+
+        <!-- Difficulty + Start -->
+        <div class="quiz-start-bar">
+          <div class="difficulty-picker" role="radiogroup" aria-label="Difficulty level">
+            <label class="difficulty-btn"><input type="radio" name="difficulty" value="all" checked> All</label>
+            <label class="difficulty-btn"><input type="radio" name="difficulty" value="1"> Easy</label>
+            <label class="difficulty-btn"><input type="radio" name="difficulty" value="3"> Medium</label>
+            <label class="difficulty-btn"><input type="radio" name="difficulty" value="5"> Hard</label>
+          </div>
+          <button class="btn btn--primary btn--lg" id="start-quiz-btn" onclick="startQuiz()">
+            Start Quiz →
+          </button>
+        </div>
+      </section>
+
+      <!-- LEADERBOARD PREVIEW -->
+      <section aria-labelledby="leaderboard-heading" style="margin-top:2.5rem">
+        <div class="section-header">
+          <h2 id="leaderboard-heading" class="section-title">Today's Leaderboard</h2>
+          <span class="text-muted" style="font-size:0.8rem">Daily challenge · Resets midnight UTC</span>
+        </div>
+        <div class="leaderboard" id="leaderboard" aria-label="Top scorers today">
+          <!-- Populated by quiz.js -->
+          <div class="leaderboard-skeleton"></div>
+        </div>
+      </section>
+    </div>
+  </div><!-- /quiz-hub -->
+
+  <!-- ── ACTIVE QUIZ SESSION ── -->
+  <div id="quiz-session" hidden aria-label="Quiz in progress">
+    <div class="quiz-session-header">
+      <button class="btn btn--ghost btn--sm" id="quiz-exit-btn" onclick="exitQuiz()">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15 10H5M9 6l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Exit
+      </button>
+      <div class="quiz-progress-bar-wrap" role="progressbar" aria-label="Quiz progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="quiz-progress-bar-wrap">
+        <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+      </div>
+      <div class="quiz-session-meta">
+        <span class="quiz-q-counter" id="quiz-q-counter">1 / 10</span>
+        <span class="quiz-timer" id="quiz-timer" hidden>⏱ 0:00</span>
+        <span class="quiz-score" id="quiz-score">Score: 0</span>
+      </div>
+    </div>
+
+    <div class="quiz-question-wrap container">
+      <div class="quiz-question-card" id="quiz-question-card" aria-live="polite">
+        <div class="quiz-question__meta">
+          <span class="badge badge--outline" id="quiz-q-specialty"></span>
+          <span class="badge badge--outline" id="quiz-q-difficulty"></span>
+        </div>
+        <h2 class="quiz-question__text" id="quiz-question-text"></h2>
+        <ul class="quiz-options" id="quiz-options" role="list" aria-label="Answer options"></ul>
+        <div class="quiz-feedback" id="quiz-feedback" hidden aria-live="assertive"></div>
+      </div>
+
+      <div class="quiz-action-bar">
+        <div class="quiz-action-bar__left">
+          <button class="btn btn--ghost btn--sm" id="quiz-flag-btn" onclick="flagQuestion()" title="Flag this question for review">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 2v16M4 2l12 5-12 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Flag
+          </button>
+        </div>
+        <button class="btn btn--primary" id="quiz-next-btn" onclick="nextQuestion()" hidden>Next →</button>
+      </div>
+    </div>
+  </div><!-- /quiz-session -->
+
+  <!-- ── QUIZ RESULTS ── -->
+  <div id="quiz-results" hidden aria-label="Quiz results" aria-live="polite">
+    <div class="container quiz-results-wrap">
+      <div class="quiz-results-card">
+        <div class="quiz-results__score-ring" id="results-score-ring" aria-label="Score">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8" stroke-dasharray="326.7" stroke-dashoffset="326.7" id="score-ring-fill" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+            <text x="60" y="60" text-anchor="middle" dominant-baseline="central" fill="var(--text-primary)" font-size="24" font-weight="600" id="score-ring-text">0%</text>
+          </svg>
+        </div>
+        <h2 class="quiz-results__heading" id="results-heading">Quiz Complete!</h2>
+        <p class="quiz-results__sub" id="results-sub"></p>
+        <div class="quiz-results__stats" id="results-stats"></div>
+        <div class="quiz-results__actions">
+          <button class="btn btn--primary" onclick="reviewAnswers()">Review Answers</button>
+          <button class="btn btn--ghost" onclick="retakeQuiz()">Retake Quiz</button>
+          <button class="btn btn--ghost" onclick="shareResult()">Share</button>
+          <a href="/quiz.html" class="btn btn--ghost" onclick="exitToHub()">New Quiz</a>
+        </div>
+        <div class="quiz-certificate-cta" id="cme-cert-cta" hidden>
+          <p>This was a CME module. Download your certificate:</p>
+          <button class="btn btn--accent" onclick="downloadCertificate()">Download Certificate (PDF)</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /quiz-results -->
+
+</main>
+
+<footer class="footer footer--compact" role="contentinfo">
+  <div class="container">
+    <span>© 2026 MedIntel Pro · All questions reviewed by licensed medical professionals</span>
+    <span class="footer__disclaimer">For educational purposes only.</span>
+  </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/quiz.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    initTheme();
+    initQuizHub();
+  });
+</script>
+</body>
+</html>
