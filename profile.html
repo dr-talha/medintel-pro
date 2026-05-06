@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MedIntel Pro account — sign in, health logs, settings, privacy controls. Free for everyone.">
+  <title>Account — MedIntel Pro</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="MedIntel Pro home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="var(--accent)"/>
+        <path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="nav__logo-text">MedIntel<span class="nav__logo-pro">Pro</span></span>
+    </a>
+    <ul class="nav__links" role="list">
+      <li><a href="/drugs.html" class="nav__link">Drugs</a></li>
+      <li><a href="/calculators.html" class="nav__link">Calc</a></li>
+      <li><a href="/first-aid.html" class="nav__link nav__link--alert">First Aid</a></li>
+      <li><a href="/quiz.html" class="nav__link">Quiz</a></li>
+      <li><a href="/disease-map.html" class="nav__link">Map</a></li>
+      <li><a href="/blog.html" class="nav__link">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="nav__theme-btn" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-sun" aria-hidden="true"><circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-moon" aria-hidden="true"><path d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5z" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <!-- ── AUTH PANEL (shown when logged out) ── -->
+  <div id="auth-panel" class="auth-panel">
+    <div class="auth-card">
+      <div class="auth-card__logo" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="6" fill="var(--accent)"/>
+          <path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="auth-card__title">MedIntel Pro</h1>
+      <p class="auth-card__sub">100% free account. Unlocks health logs, history, offline sync, and CME certificates.</p>
+
+      <!-- TABS: Sign in / Register -->
+      <div class="auth-tabs" role="tablist" aria-label="Authentication">
+        <button class="auth-tab auth-tab--active" role="tab" aria-selected="true" aria-controls="auth-signin" id="auth-tab-signin">Sign in</button>
+        <button class="auth-tab" role="tab" aria-selected="false" aria-controls="auth-register" id="auth-tab-register">Create account</button>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <div id="auth-signin" role="tabpanel" aria-labelledby="auth-tab-signin">
+        <div class="auth-form" id="signin-form">
+          <div class="form-field">
+            <label for="signin-email" class="form-label">Email</label>
+            <input type="email" id="signin-email" class="form-input" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <div class="form-field">
+            <label for="signin-password" class="form-label">Password</label>
+            <input type="password" id="signin-password" class="form-input" placeholder="Your password" autocomplete="current-password" required>
+            <a href="#" class="form-field__link" id="forgot-password-btn">Forgot password?</a>
+          </div>
+          <div class="form-error" id="signin-error" role="alert" hidden></div>
+          <button class="btn btn--primary btn--full" id="signin-btn" onclick="signIn()">Sign in</button>
+          <div class="auth-divider"><span>or</span></div>
+          <button class="btn btn--ghost btn--full auth-magic-btn" onclick="sendMagicLink()">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Sign in with magic link (email)
+          </button>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="auth-register" role="tabpanel" aria-labelledby="auth-tab-register" hidden>
+        <div class="auth-form" id="register-form">
+          <div class="form-field">
+            <label for="reg-email" class="form-label">Email</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+          <div class="form-field">
+            <label for="reg-password" class="form-label">Password</label>
+            <input type="password" id="reg-password" class="form-input" placeholder="Min. 8 characters" autocomplete="new-password" minlength="8" required>
+          </div>
+          <div class="form-field">
+            <label for="reg-specialty" class="form-label">Your role <span class="form-label__optional">(optional)</span></label>
+            <select id="reg-specialty" class="form-input">
+              <option value="">Select your role</option>
+              <option value="physician">Physician / Doctor</option>
+              <option value="pharmacist">Pharmacist</option>
+              <option value="nurse">Nurse / Midwife</option>
+              <option value="med-student">Medical Student</option>
+              <option value="pharmacy-student">Pharmacy Student</option>
+              <option value="nursing-student">Nursing Student</option>
+              <option value="allied-health">Allied Health Professional</option>
+              <option value="researcher">Researcher</option>
+              <option value="general">General Public</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="filter-item" style="font-size:0.85rem">
+              <input type="checkbox" id="reg-terms" required>
+              I agree to the <a href="/privacy.html" target="_blank">Privacy Policy</a>. I understand MedIntel Pro is for reference only, not medical advice.
+            </label>
+          </div>
+          <div class="form-error" id="register-error" role="alert" hidden></div>
+          <button class="btn btn--primary btn--full" id="register-btn" onclick="register()">Create free account</button>
+        </div>
+      </div>
+
+      <p class="auth-card__note">
+        <svg width="12" height="12" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="11" width="14" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 11V7a3 3 0 0 1 6 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        No credit card. No ads. No data selling. AES-256 encrypted health data.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── ACCOUNT DASHBOARD (shown when logged in) ── -->
+  <div id="account-dashboard" class="container" hidden>
+    <div class="page-layout page-layout--sidebar">
+
+      <!-- SIDEBAR: Account nav -->
+      <aside class="sidebar" aria-label="Account sections">
+        <div class="sidebar__section account-avatar-wrap">
+          <div class="account-avatar" id="account-avatar" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="12" r="6" stroke="var(--accent)" stroke-width="1.5"/><path d="M4 28c0-6.6 5.4-12 12-12s12 5.4 12 12" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <p class="account-name" id="account-name">Loading…</p>
+          <p class="account-email" id="account-email"></p>
+        </div>
+        <nav aria-label="Account navigation">
+          <ul class="sidebar__links sidebar__links--pill" role="list">
+            <li><button class="account-nav-btn account-nav-btn--active" data-section="overview">Overview</button></li>
+            <li><button class="account-nav-btn" data-section="health-logs">Health Logs</button></li>
+            <li><button class="account-nav-btn" data-section="quiz-history">Quiz History</button></li>
+            <li><button class="account-nav-btn" data-section="bookmarks">Bookmarks</button></li>
+            <li><button class="account-nav-btn" data-section="notifications">Notifications</button></li>
+            <li><button class="account-nav-btn" data-section="privacy">Privacy</button></li>
+            <li><button class="account-nav-btn" data-section="offline">Offline Sync</button></li>
+          </ul>
+        </nav>
+        <div style="margin-top:auto;padding-top:1rem;">
+          <button class="btn btn--ghost btn--sm btn--full" id="signout-btn" onclick="signOut()">Sign out</button>
+        </div>
+      </aside>
+
+      <!-- MAIN PANEL -->
+      <div class="main-panel" id="account-main-panel">
+
+        <!-- OVERVIEW SECTION -->
+        <div class="account-section account-section--active" id="section-overview">
+          <h1 class="page-title">My Account</h1>
+          <div class="account-stats-grid">
+            <div class="account-stat-card">
+              <span class="account-stat-card__value" id="stat-queries">–</span>
+              <span class="account-stat-card__label">AI queries made</span>
+            </div>
+            <div class="account-stat-card">
+              <span class="account-stat-card__value" id="stat-quiz-score">–</span>
+              <span class="account-stat-card__label">Avg quiz score</span>
+            </div>
+            <div class="account-stat-card">
+              <span class="account-stat-card__value" id="stat-streak">–</span>
+              <span class="account-stat-card__label">Day streak 🔥</span>
+            </div>
+            <div class="account-stat-card">
+              <span class="account-stat-card__value" id="stat-bookmarks">–</span>
+              <span class="account-stat-card__label">Saved items</span>
+            </div>
+          </div>
+
+          <div class="section-header" style="margin-top:2rem">
+            <h2 class="section-title section-title--sm">Recent activity</h2>
+          </div>
+          <ul class="activity-list" id="activity-list">
+            <div class="post-skeleton post-skeleton--sm"></div>
+            <div class="post-skeleton post-skeleton--sm"></div>
+            <div class="post-skeleton post-skeleton--sm"></div>
+          </ul>
+        </div>
+
+        <!-- HEALTH LOGS SECTION -->
+        <div class="account-section" id="section-health-logs" hidden>
+          <div class="section-header">
+            <h2 class="page-title">Health Logs</h2>
+            <button class="btn btn--primary btn--sm" onclick="openNewLogModal()">+ New log</button>
+          </div>
+          <div class="health-log-notice" role="note">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="11" width="14" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 11V7a3 3 0 0 1 6 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            All health log entries are encrypted with AES-256. Only you can read them. <a href="#privacy" onclick="showSection('privacy')">Privacy settings →</a>
+          </div>
+          <div class="health-log-list" id="health-log-list" aria-live="polite">
+            <div class="post-skeleton"></div>
+            <div class="post-skeleton"></div>
+          </div>
+        </div>
+
+        <!-- QUIZ HISTORY SECTION -->
+        <div class="account-section" id="section-quiz-history" hidden>
+          <h2 class="page-title">Quiz History</h2>
+          <div class="quiz-history-chart" id="quiz-history-chart" aria-label="Quiz performance chart">
+            <!-- Rendered by quiz.js -->
+          </div>
+          <div class="quiz-weak-topics" id="quiz-weak-topics">
+            <h3 class="section-title section-title--sm">Topics to improve</h3>
+            <div class="weak-topic-list" id="weak-topic-list" aria-live="polite"></div>
+          </div>
+          <div class="quiz-session-history" id="quiz-session-history">
+            <h3 class="section-title section-title--sm">Past sessions</h3>
+            <ul class="session-list" id="session-list" aria-label="Past quiz sessions"></ul>
+          </div>
+          <div class="cme-certificates" id="cme-certificates">
+            <h3 class="section-title section-title--sm">CME Certificates</h3>
+            <div id="cert-list" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <!-- BOOKMARKS SECTION -->
+        <div class="account-section" id="section-bookmarks" hidden>
+          <h2 class="page-title">Bookmarks</h2>
+          <div class="tabs" role="tablist">
+            <button class="tab tab--active" data-bookmark-tab="articles">Articles</button>
+            <button class="tab" data-bookmark-tab="drugs">Drugs</button>
+            <button class="tab" data-bookmark-tab="diseases">Diseases</button>
+            <button class="tab" data-bookmark-tab="quizzes">Quiz sets</button>
+          </div>
+          <div class="bookmark-list" id="bookmark-list" aria-live="polite">
+            <div class="post-skeleton"></div>
+            <div class="post-skeleton"></div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATIONS SECTION -->
+        <div class="account-section" id="section-notifications" hidden>
+          <h2 class="page-title">Notification Settings</h2>
+          <div class="settings-group">
+            <h3 class="settings-group__title">Drug alerts</h3>
+            <label class="settings-toggle">
+              <span class="settings-toggle__label">Drug recall alerts for saved drugs</span>
+              <input type="checkbox" id="notif-recalls" class="toggle-input" checked>
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+            <label class="settings-toggle">
+              <span class="settings-toggle__label">New drug interaction warnings</span>
+              <input type="checkbox" id="notif-interactions" class="toggle-input">
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+          </div>
+          <div class="settings-group">
+            <h3 class="settings-group__title">Disease & outbreak alerts</h3>
+            <label class="settings-toggle">
+              <span class="settings-toggle__label">WHO outbreak alerts</span>
+              <input type="checkbox" id="notif-outbreaks" class="toggle-input" checked>
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+            <label class="settings-toggle">
+              <span class="settings-toggle__label">Location-based outbreak alerts</span>
+              <input type="checkbox" id="notif-location" class="toggle-input">
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+          </div>
+          <div class="settings-group">
+            <h3 class="settings-group__title">Quiz</h3>
+            <label class="settings-toggle">
+              <span class="settings-toggle__label">Daily challenge reminder</span>
+              <input type="checkbox" id="notif-quiz" class="toggle-input" checked>
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+          </div>
+          <button class="btn btn--primary btn--sm" onclick="saveNotificationSettings()">Save preferences</button>
+        </div>
+
+        <!-- PRIVACY SECTION -->
+        <div class="account-section" id="section-privacy" hidden>
+          <h2 class="page-title">Privacy Controls</h2>
+          <div class="settings-group">
+            <h3 class="settings-group__title">AI chat history</h3>
+            <p class="settings-group__desc text-muted">Off by default. Your queries are never stored unless you enable this.</p>
+            <label class="settings-toggle">
+              <span class="settings-toggle__label">Save AI chat history</span>
+              <input type="checkbox" id="privacy-chat-history" class="toggle-input">
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+            <button class="btn btn--ghost btn--sm" id="delete-chat-history-btn" onclick="deleteChatHistory()">Delete all chat history</button>
+          </div>
+          <div class="settings-group">
+            <h3 class="settings-group__title">Health logs</h3>
+            <div class="settings-actions">
+              <button class="btn btn--ghost btn--sm" onclick="exportHealthLogs()">Export health logs (JSON)</button>
+              <button class="btn btn--danger btn--sm" onclick="deleteAllHealthLogs()">Delete all health logs</button>
+            </div>
+          </div>
+          <div class="settings-group">
+            <h3 class="settings-group__title">Account</h3>
+            <div class="settings-actions">
+              <button class="btn btn--ghost btn--sm" onclick="exportAllData()">Export all my data (GDPR)</button>
+              <button class="btn btn--danger btn--sm" onclick="deleteAccount()">Delete account permanently</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OFFLINE SYNC SECTION -->
+        <div class="account-section" id="section-offline" hidden>
+          <h2 class="page-title">Offline Sync</h2>
+          <p class="text-muted" style="margin-bottom:1.5rem">Download data to use MedIntel Pro with no internet connection.</p>
+          <div class="offline-sync-grid">
+            <div class="offline-item">
+              <div class="offline-item__info">
+                <strong>Drug database (top 5,000)</strong>
+                <span class="text-muted">~12 MB</span>
+              </div>
+              <div class="offline-item__status" id="offline-drugs-status">Not downloaded</div>
+              <button class="btn btn--ghost btn--sm" onclick="downloadOfflineData('drugs')">Download</button>
+            </div>
+            <div class="offline-item">
+              <div class="offline-item__info">
+                <strong>Medical glossary (10,000 terms)</strong>
+                <span class="text-muted">~8 MB</span>
+              </div>
+              <div class="offline-item__status" id="offline-glossary-status">Not downloaded</div>
+              <button class="btn btn--ghost btn--sm" onclick="downloadOfflineData('glossary')">Download</button>
+            </div>
+            <div class="offline-item">
+              <div class="offline-item__info">
+                <strong>First aid protocols</strong>
+                <span class="text-muted">~2 MB — always cached</span>
+              </div>
+              <div class="offline-item__status offline-item__status--ready">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Ready
+              </div>
+            </div>
+            <div class="offline-item">
+              <div class="offline-item__info">
+                <strong>Medical calculators</strong>
+                <span class="text-muted">~1 MB — always cached</span>
+              </div>
+              <div class="offline-item__status offline-item__status--ready">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Ready
+              </div>
+            </div>
+            <div class="offline-item">
+              <div class="offline-item__info">
+                <strong>Quiz questions (1,000)</strong>
+                <span class="text-muted">~5 MB</span>
+              </div>
+              <div class="offline-item__status" id="offline-quiz-status">Not downloaded</div>
+              <button class="btn btn--ghost btn--sm" onclick="downloadOfflineData('quiz')">Download</button>
+            </div>
+          </div>
+          <button class="btn btn--primary" onclick="downloadAllOfflineData()" style="margin-top:1.5rem">Download everything</button>
+          <p class="text-muted" style="margin-top:0.5rem;font-size:0.8rem">Tip: Download on WiFi to save mobile data.</p>
+        </div>
+
+      </div><!-- /account-main-panel -->
+    </div>
+  </div><!-- /account-dashboard -->
+
+</main>
+
+<footer class="footer footer--compact" role="contentinfo">
+  <div class="container">
+    <span>© 2026 MedIntel Pro · Free for everyone · support@medintel.pro</span>
+    <span class="footer__disclaimer">No ads. No data selling. AES-256 encryption.</span>
+  </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    initTheme();
+    initAuthPage();
+
+    // Deep-link to a section: /profile.html#register
+    const hash = location.hash.replace('#', '');
+    if (hash === 'register') switchAuthTab('register');
+    if (hash && document.getElementById('section-' + hash)) showSection(hash);
+  });
+</script>
+</body>
+</html>

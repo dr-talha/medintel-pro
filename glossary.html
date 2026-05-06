@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Medical glossary — 50,000+ terms from MeSH, DailyMed and clinical sources. Typo-tolerant search, audio pronunciation, offline top 10,000 terms.">
+  <title>Medical Glossary — MedIntel Pro</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="MedIntel Pro home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="var(--accent)"/>
+        <path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="nav__logo-text">MedIntel<span class="nav__logo-pro">Pro</span></span>
+    </a>
+    <ul class="nav__links" role="list">
+      <li><a href="/drugs.html" class="nav__link">Drugs</a></li>
+      <li><a href="/calculators.html" class="nav__link">Calc</a></li>
+      <li><a href="/first-aid.html" class="nav__link nav__link--alert">First Aid</a></li>
+      <li><a href="/quiz.html" class="nav__link">Quiz</a></li>
+      <li><a href="/disease-map.html" class="nav__link">Map</a></li>
+      <li><a href="/blog.html" class="nav__link">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="nav__theme-btn" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-sun" aria-hidden="true"><circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-moon" aria-hidden="true"><path d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5z" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <a href="/profile.html" class="btn btn--ghost btn--sm" id="nav-auth-btn">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+  <div class="page-layout page-layout--sidebar">
+
+    <!-- SIDEBAR: Alphabet + Specialty -->
+    <aside class="sidebar" aria-label="Glossary navigation">
+      <div class="sidebar__section">
+        <h2 class="sidebar__heading">Browse A–Z</h2>
+        <nav class="alpha-nav" aria-label="Alphabetical glossary navigation">
+          <div class="alpha-grid">
+            <button class="alpha-btn alpha-btn--active" data-letter="all">All</button>
+            <button class="alpha-btn" data-letter="A">A</button>
+            <button class="alpha-btn" data-letter="B">B</button>
+            <button class="alpha-btn" data-letter="C">C</button>
+            <button class="alpha-btn" data-letter="D">D</button>
+            <button class="alpha-btn" data-letter="E">E</button>
+            <button class="alpha-btn" data-letter="F">F</button>
+            <button class="alpha-btn" data-letter="G">G</button>
+            <button class="alpha-btn" data-letter="H">H</button>
+            <button class="alpha-btn" data-letter="I">I</button>
+            <button class="alpha-btn" data-letter="J">J</button>
+            <button class="alpha-btn" data-letter="K">K</button>
+            <button class="alpha-btn" data-letter="L">L</button>
+            <button class="alpha-btn" data-letter="M">M</button>
+            <button class="alpha-btn" data-letter="N">N</button>
+            <button class="alpha-btn" data-letter="O">O</button>
+            <button class="alpha-btn" data-letter="P">P</button>
+            <button class="alpha-btn" data-letter="Q">Q</button>
+            <button class="alpha-btn" data-letter="R">R</button>
+            <button class="alpha-btn" data-letter="S">S</button>
+            <button class="alpha-btn" data-letter="T">T</button>
+            <button class="alpha-btn" data-letter="U">U</button>
+            <button class="alpha-btn" data-letter="V">V</button>
+            <button class="alpha-btn" data-letter="W">W</button>
+            <button class="alpha-btn" data-letter="X">X</button>
+            <button class="alpha-btn" data-letter="Y">Y</button>
+            <button class="alpha-btn" data-letter="Z">Z</button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="sidebar__section">
+        <h2 class="sidebar__heading">Filter by specialty</h2>
+        <ul class="sidebar__links sidebar__links--pill" role="list">
+          <li><button class="filter-pill filter-pill--active" data-specialty="all">All</button></li>
+          <li><button class="filter-pill" data-specialty="anatomy">Anatomy</button></li>
+          <li><button class="filter-pill" data-specialty="pharmacology">Pharmacology</button></li>
+          <li><button class="filter-pill" data-specialty="cardiology">Cardiology</button></li>
+          <li><button class="filter-pill" data-specialty="neurology">Neurology</button></li>
+          <li><button class="filter-pill" data-specialty="pathology">Pathology</button></li>
+          <li><button class="filter-pill" data-specialty="microbiology">Microbiology</button></li>
+          <li><button class="filter-pill" data-specialty="surgery">Surgery</button></li>
+          <li><button class="filter-pill" data-specialty="pediatrics">Pediatrics</button></li>
+          <li><button class="filter-pill" data-specialty="psychiatry">Psychiatry</button></li>
+        </ul>
+      </div>
+
+      <div class="sidebar__section">
+        <div class="sidebar__stat">
+          <span class="sidebar__stat-value">50,000+</span>
+          <span class="sidebar__stat-label">Terms in database</span>
+        </div>
+        <div class="sidebar__stat">
+          <span class="sidebar__stat-value badge badge--success">Offline</span>
+          <span class="sidebar__stat-label">Top 10,000 terms cached</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN PANEL -->
+    <div class="main-panel">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Medical Glossary</h1>
+          <p class="page-subtitle">MeSH · DailyMed · 50,000+ terms · Audio pronunciation · Typos OK</p>
+        </div>
+      </div>
+
+      <!-- BIG SEARCH BAR -->
+      <div class="glossary-search-wrap">
+        <form class="glossary-search" id="glossary-search-form" role="search" autocomplete="off">
+          <svg class="glossary-search__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M15 15l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input
+            type="search"
+            id="glossary-input"
+            class="glossary-search__input"
+            placeholder="Search any medical term — typos are OK…"
+            aria-label="Search medical terms"
+            aria-autocomplete="list"
+            aria-controls="glossary-autocomplete"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <span class="glossary-search__hint" id="glossary-hint">e.g. pneumoconiosis, myocardial infarction, dysarthria</span>
+        </form>
+        <ul class="autocomplete" id="glossary-autocomplete" role="listbox" aria-label="Term suggestions" hidden></ul>
+      </div>
+
+      <!-- POPULAR SEARCHES -->
+      <div class="popular-terms" id="popular-terms">
+        <span class="popular-terms__label">Popular:</span>
+        <button class="chip" onclick="glossarySearch('hypertension')">Hypertension</button>
+        <button class="chip" onclick="glossarySearch('myocardial infarction')">Myocardial infarction</button>
+        <button class="chip" onclick="glossarySearch('dyspnea')">Dyspnea</button>
+        <button class="chip" onclick="glossarySearch('atrial fibrillation')">Atrial fibrillation</button>
+        <button class="chip" onclick="glossarySearch('pneumonia')">Pneumonia</button>
+        <button class="chip" onclick="glossarySearch('sepsis')">Sepsis</button>
+        <button class="chip" onclick="glossarySearch('tachycardia')">Tachycardia</button>
+        <button class="chip" onclick="glossarySearch('edema')">Edema</button>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="glossary-results" id="glossary-results" hidden aria-live="polite">
+        <div class="glossary-results__header">
+          <span id="glossary-results-count"></span>
+        </div>
+        <ul class="term-list" id="term-list" role="list" aria-label="Glossary results"></ul>
+        <button class="btn btn--ghost btn--full" id="glossary-load-more" hidden>Load more terms</button>
+      </div>
+
+      <!-- TERM DETAIL (shown when user clicks a term) -->
+      <div class="term-detail" id="term-detail" hidden aria-live="polite">
+        <button class="back-btn" id="term-back-btn">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15 10H5M9 6l-4 4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back to results
+        </button>
+
+        <div class="term-detail__header">
+          <div>
+            <div class="term-detail__flags" id="term-flags"></div>
+            <h2 class="term-detail__name" id="term-name"></h2>
+            <p class="term-detail__phonetic" id="term-phonetic"></p>
+          </div>
+          <button
+            class="btn btn--ghost btn--sm term-audio-btn"
+            id="term-audio-btn"
+            onclick="pronounceTerm()"
+            aria-label="Play pronunciation"
+          >
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M3 8v4h4l5 5V3L7 8H3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M16 7a6 6 0 0 1 0 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Pronounce
+          </button>
+        </div>
+
+        <!-- Definition -->
+        <section class="term-section">
+          <h3 class="term-section__title">Definition</h3>
+          <p class="term-section__body" id="term-definition"></p>
+        </section>
+
+        <!-- Also known as -->
+        <section class="term-section" id="term-synonyms-section" hidden>
+          <h3 class="term-section__title">Also known as</h3>
+          <div class="term-synonyms" id="term-synonyms"></div>
+        </section>
+
+        <!-- Cross-references -->
+        <section class="term-section" id="term-crossref-section" hidden>
+          <h3 class="term-section__title">Related terms</h3>
+          <div class="term-crossrefs" id="term-crossrefs"></div>
+        </section>
+
+        <!-- ICD / MeSH codes -->
+        <section class="term-section" id="term-codes-section" hidden>
+          <h3 class="term-section__title">Classification codes</h3>
+          <div class="term-codes" id="term-codes"></div>
+        </section>
+
+        <!-- Source -->
+        <div class="drug-source-bar" id="term-source-bar">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16A8 8 0 0 0 10 2zm0 4v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Source: <span id="term-source"></span>
+        </div>
+
+        <!-- Ask AI -->
+        <div class="term-ask-ai">
+          <button class="btn btn--ghost btn--sm" onclick="askAIAboutTerm()">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect width="20" height="20" rx="5" fill="var(--accent)"/><path d="M10 4v12M4 10h12" stroke="var(--bg-primary)" stroke-width="2" stroke-linecap="round"/></svg>
+            Ask AI for more context
+          </button>
+        </div>
+      </div>
+
+      <!-- A–Z BROWSE VIEW (shown when browsing by letter) -->
+      <div class="alpha-browse" id="alpha-browse" hidden aria-live="polite">
+        <h2 class="alpha-browse__heading" id="alpha-browse-heading"></h2>
+        <ul class="term-list term-list--compact" id="alpha-term-list" role="list"></ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer footer--compact" role="contentinfo">
+  <div class="container">
+    <span>© 2026 MedIntel Pro · Glossary: MeSH (NLM) + DailyMed + curated clinical terms</span>
+    <span class="footer__disclaimer">For reference only. Consult a healthcare professional.</span>
+  </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    initTheme();
+    initGlossary();
+
+    const urlQ = new URLSearchParams(location.search).get('q');
+    if (urlQ) {
+      document.getElementById('glossary-input').value = urlQ;
+      glossarySearch(urlQ);
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live medical news and research — WHO, CDC, NIH, PubMed, expert contributors. Free, always updated.">
+  <title>Blog & News — MedIntel Pro</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="MedIntel Pro home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="var(--accent)"/>
+        <path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="nav__logo-text">MedIntel<span class="nav__logo-pro">Pro</span></span>
+    </a>
+    <div class="nav__search-wrap">
+      <form class="nav__search" id="blog-search-form" role="search">
+        <svg class="nav__search-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M15 15l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input type="search" name="q" id="blog-search-input" placeholder="Search articles…" class="nav__search-input" aria-label="Search blog articles">
+      </form>
+    </div>
+    <ul class="nav__links" role="list">
+      <li><a href="/drugs.html" class="nav__link">Drugs</a></li>
+      <li><a href="/calculators.html" class="nav__link">Calc</a></li>
+      <li><a href="/first-aid.html" class="nav__link nav__link--alert">First Aid</a></li>
+      <li><a href="/quiz.html" class="nav__link">Quiz</a></li>
+      <li><a href="/disease-map.html" class="nav__link">Map</a></li>
+      <li><a href="/blog.html" class="nav__link nav__link--active" aria-current="page">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="nav__theme-btn" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-sun" aria-hidden="true"><circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" class="icon-moon" aria-hidden="true"><path d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5z" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <a href="/profile.html" class="btn btn--ghost btn--sm" id="nav-auth-btn">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<!-- BREAKING ALERT BANNER (populated if WHO/CDC urgent alert exists) -->
+<div class="breaking-banner" id="breaking-banner" hidden role="alert" aria-live="assertive">
+  <span class="breaking-banner__label">BREAKING</span>
+  <span class="breaking-banner__text" id="breaking-banner-text"></span>
+  <a class="breaking-banner__link" id="breaking-banner-link" href="#">Read more →</a>
+  <button class="breaking-banner__close" id="breaking-banner-close" aria-label="Dismiss alert">×</button>
+</div>
+
+<main id="main-content">
+  <div class="page-layout page-layout--sidebar">
+
+    <!-- SIDEBAR: Filters + Sources -->
+    <aside class="sidebar" aria-label="Blog filters">
+
+      <!-- Specialty filter -->
+      <div class="sidebar__section">
+        <h2 class="sidebar__heading">Specialty</h2>
+        <nav aria-label="Filter by specialty">
+          <ul class="sidebar__links sidebar__links--pill" role="list">
+            <li><button class="filter-pill filter-pill--active" data-specialty="all">All</button></li>
+            <li><button class="filter-pill" data-specialty="cardiology">Cardiology</button></li>
+            <li><button class="filter-pill" data-specialty="oncology">Oncology</button></li>
+            <li><button class="filter-pill" data-specialty="neurology">Neurology</button></li>
+            <li><button class="filter-pill" data-specialty="infectious">Infectious Disease</button></li>
+            <li><button class="filter-pill" data-specialty="pharmacology">Pharmacology</button></li>
+            <li><button class="filter-pill" data-specialty="public-health">Public Health</button></li>
+            <li><button class="filter-pill" data-specialty="pediatrics">Pediatrics</button></li>
+            <li><button class="filter-pill" data-specialty="emergency">Emergency Med</button></li>
+            <li><button class="filter-pill" data-specialty="psychiatry">Psychiatry</button></li>
+            <li><button class="filter-pill" data-specialty="surgery">Surgery</button></li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Source filter -->
+      <div class="sidebar__section">
+        <h2 class="sidebar__heading">Source</h2>
+        <div class="source-filter-list">
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="who" checked> WHO
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="cdc" checked> CDC MMWR
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="nih" checked> NIH
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="pubmed" checked> PubMed
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="nejm" checked> NEJM (open access)
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="ecdc" checked> ECDC
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="expert" checked> Expert contributors
+          </label>
+          <label class="filter-item">
+            <input type="checkbox" name="source" value="ai-brief" checked> AI Research Briefs
+          </label>
+        </div>
+      </div>
+
+      <!-- Content type -->
+      <div class="sidebar__section">
+        <h2 class="sidebar__heading">Content type</h2>
+        <div class="type-filter-list">
+          <label class="filter-item"><input type="checkbox" name="type" value="news" checked> News</label>
+          <label class="filter-item"><input type="checkbox" name="type" value="research" checked> Research</label>
+          <label class="filter-item"><input type="checkbox" name="type" value="alert" checked> Outbreak alerts</label>
+          <label class="filter-item"><input type="checkbox" name="type" value="expert" checked> Expert articles</label>
+          <label class="filter-item"><input type="checkbox" name="type" value="brief" checked> AI briefs</label>
+        </div>
+      </div>
+
+      <!-- RSS subscribe -->
+      <div class="sidebar__section">
+        <h3 class="sidebar__heading sidebar__heading--sm">Subscribe to feed</h3>
+        <a href="/api/rss" class="btn btn--ghost btn--sm btn--full" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="5" cy="15" r="2" fill="currentColor"/><path d="M3 9a8 8 0 0 1 8 8M3 5a12 12 0 0 1 12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          RSS feed
+        </a>
+      </div>
+    </aside>
+
+    <!-- MAIN PANEL -->
+    <div class="main-panel">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Blog & Medical News</h1>
+          <p class="page-subtitle">WHO · CDC · NIH · PubMed · Expert contributors — updated every 30 minutes</p>
+        </div>
+        <div class="blog-view-toggle" role="group" aria-label="View style">
+          <button class="view-btn view-btn--active" data-view="cards" aria-label="Card view" title="Card view">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="2" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <button class="view-btn" data-view="list" aria-label="List view" title="List view">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- FEATURED / PINNED ARTICLE -->
+      <article class="featured-post" id="featured-post" aria-label="Featured article" hidden>
+        <div class="featured-post__inner">
+          <div class="featured-post__meta">
+            <span class="badge badge--live featured-post__badge" id="featured-badge">WHO Alert</span>
+            <span class="featured-post__source" id="featured-source"></span>
+            <span class="featured-post__time" id="featured-time"></span>
+          </div>
+          <h2 class="featured-post__title" id="featured-title"></h2>
+          <p class="featured-post__excerpt" id="featured-excerpt"></p>
+          <a class="btn btn--primary" id="featured-link" href="#">Read full article →</a>
+        </div>
+      </article>
+
+      <!-- SORT BAR -->
+      <div class="blog-sort-bar">
+        <span class="blog-sort-bar__count" id="article-count">Loading…</span>
+        <div class="blog-sort-bar__right">
+          <select class="select-sm" id="blog-sort" aria-label="Sort articles">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="source">By source</option>
+            <option value="urgency">Urgency</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ARTICLE GRID -->
+      <div class="article-grid" id="article-grid" aria-label="Articles">
+        <!-- Skeleton cards while loading -->
+        <div class="post-skeleton"></div>
+        <div class="post-skeleton"></div>
+        <div class="post-skeleton"></div>
+        <div class="post-skeleton"></div>
+        <div class="post-skeleton"></div>
+        <div class="post-skeleton"></div>
+      </div>
+
+      <!-- LOAD MORE -->
+      <div class="load-more-wrap" id="load-more-wrap" hidden>
+        <button class="btn btn--ghost" id="load-more-btn" onclick="loadMoreArticles()">Load more articles</button>
+        <span class="text-muted" id="article-pagination-info"></span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer footer--compact" role="contentinfo">
+  <div class="container">
+    <span>© 2026 MedIntel Pro · News updated every 30 minutes from verified sources</span>
+    <span class="footer__disclaimer">For reference only. Consult a healthcare professional.</span>
+  </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    initTheme();
+    initBlogPage();
+  });
+
+  function initBlogPage() {
+    loadArticles({ specialty: 'all', sources: 'all', page: 1 });
+    loadBreakingAlert();
+    initFilters();
+    initViewToggle();
+  }
+</script>
+</body>
+</html>
