@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MedIntel Pro Privacy Policy — your data belongs to you. No ads, no data selling, GDPR compliant.">
+  <title>Privacy Policy — MedIntel Pro</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <style>
+    .privacy-page { max-width: 780px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+    .privacy-page h1 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--clr-text-primary); margin-bottom: 0.5rem; }
+    .privacy-page .subtitle { color: var(--clr-text-muted); font-size: var(--fs-sm); margin-bottom: 2.5rem; }
+    .privacy-pledge {
+      background: var(--clr-primary-muted); border: 1px solid var(--clr-primary-glow);
+      border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .privacy-pledge__icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .privacy-pledge__text { color: var(--clr-accent-mint); font-size: var(--fs-base); font-weight: 500; line-height: 1.6; }
+    .privacy-page h2 { font-size: var(--fs-lg); color: var(--clr-text-primary); margin: 2rem 0 0.75rem; border-bottom: 1px solid var(--clr-border-faint); padding-bottom: 0.5rem; }
+    .privacy-page p, .privacy-page li { color: var(--clr-text-secondary); font-size: var(--fs-base); line-height: 1.75; margin-bottom: 0.75rem; }
+    .privacy-page ul { padding-left: 1.5rem; }
+    .privacy-page li { margin-bottom: 0.4rem; }
+    .privacy-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: var(--fs-sm); }
+    .privacy-table th { text-align: left; padding: 0.6rem 0.75rem; background: var(--clr-bg-raised); color: var(--clr-text-secondary); font-weight: 600; border-bottom: 1px solid var(--clr-border-mid); }
+    .privacy-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--clr-border-faint); color: var(--clr-text-secondary); vertical-align: top; }
+    .privacy-table tr:last-child td { border-bottom: none; }
+    .tag-yes { color: var(--clr-success); font-weight: 600; }
+    .tag-no  { color: var(--clr-danger);  font-weight: 600; }
+    .contact-box {
+      background: var(--clr-bg-raised); border: 1px solid var(--clr-border-faint);
+      border-radius: 10px; padding: 1.25rem 1.5rem; margin-top: 2rem;
+    }
+    .contact-box h3 { font-size: var(--fs-base); color: var(--clr-text-primary); margin-bottom: 0.5rem; }
+    .contact-box p  { font-size: var(--fs-sm); color: var(--clr-text-secondary); margin-bottom: 0.3rem; }
+  </style>
+</head>
+<body>
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="MedIntel Pro home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="var(--accent)"/>
+        <path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="nav__logo-text">MedIntel<span class="nav__logo-pro">Pro</span></span>
+    </a>
+    <ul class="nav__links" role="list">
+      <li><a href="/drugs.html" class="nav__link">Drugs</a></li>
+      <li><a href="/calculators.html" class="nav__link">Calc</a></li>
+      <li><a href="/first-aid.html" class="nav__link nav__link--alert">First Aid</a></li>
+      <li><a href="/quiz.html" class="nav__link">Quiz</a></li>
+      <li><a href="/disease-map.html" class="nav__link">Map</a></li>
+      <li><a href="/blog.html" class="nav__link">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="nav__theme-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="icon-sun">
+          <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="icon-moon">
+          <path d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5z" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+      <a href="/profile.html" class="btn btn--ghost btn--sm" id="nav-auth-btn">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+  <article class="privacy-page">
+
+    <h1>Privacy Policy</h1>
+    <p class="subtitle">Last updated: May 2026 · Effective immediately</p>
+
+    <div class="privacy-pledge">
+      <span class="privacy-pledge__icon">🔒</span>
+      <p class="privacy-pledge__text">
+        <strong>Your data belongs to you.</strong> MedIntel Pro does not sell, share, rent, or monetize any user data — ever.
+        We have no advertising partners. We collect only what is strictly necessary to provide the service.
+      </p>
+    </div>
+
+    <h2>1. Who We Are</h2>
+    <p>MedIntel Pro ("we", "us", "the platform") is a free medical reference application available at <a href="https://app.medintel.pro">app.medintel.pro</a>. We are not a healthcare provider, insurer, or medical device manufacturer. All content is for reference and educational purposes only.</p>
+
+    <h2>2. What Data We Collect</h2>
+    <table class="privacy-table">
+      <thead>
+        <tr><th>Data type</th><th>Collected?</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Email address</td><td class="tag-yes">Optional</td><td>Only if you create a free account. Never shared.</td></tr>
+        <tr><td>Health logs</td><td class="tag-yes">Opt-in only</td><td>AES-256 encrypted. Only you can read them. Exportable &amp; deletable at any time.</td></tr>
+        <tr><td>AI chat history</td><td class="tag-yes">Opt-in only</td><td>Off by default. Toggle in Settings → Privacy. Delete any time.</td></tr>
+        <tr><td>Quiz performance</td><td class="tag-yes">Account only</td><td>Scores &amp; weak topics for spaced repetition. Linked to your account. Deletable.</td></tr>
+        <tr><td>Uploaded files</td><td class="tag-yes">Temporary</td><td>Processed by AI immediately. Deleted within 24 hours. Never stored long-term.</td></tr>
+        <tr><td>Location</td><td class="tag-yes">Opt-in only</td><td>Used only for location-based outbreak alerts if you enable this feature. Not logged.</td></tr>
+        <tr><td>Device / browser info</td><td class="tag-yes">Anonymous</td><td>Used for crash reporting and performance monitoring. No PII. Aggregated only.</td></tr>
+        <tr><td>Search / query history</td><td class="tag-no">No</td><td>Guest queries are never stored. Account queries stored only if AI history is enabled.</td></tr>
+        <tr><td>Advertising ID / tracking</td><td class="tag-no">Never</td><td>We have no ads and collect no advertising identifiers.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>3. How We Use Your Data</h2>
+    <ul>
+      <li>To provide the service you requested (drug lookup, quiz, AI chat, etc.)</li>
+      <li>To send push notifications you explicitly enabled (drug recalls, outbreak alerts)</li>
+      <li>To improve data accuracy via anonymous error and feedback reports</li>
+      <li>To generate CME certificates where credential verification is required</li>
+    </ul>
+    <p>We do <strong>not</strong> use your data for advertising, profiling, sale to third parties, or training AI models without your explicit consent.</p>
+
+    <h2>4. Data Security</h2>
+    <ul>
+      <li><strong>Health logs:</strong> AES-256 column-level encryption. Keys stored in Supabase Vault — not accessible to our team.</li>
+      <li><strong>Data in transit:</strong> TLS 1.3 enforced on all connections.</li>
+      <li><strong>Uploaded files:</strong> Processed within your session and deleted within 24 hours. No long-term storage.</li>
+      <li><strong>Passwords:</strong> Bcrypt hashed with minimum 12 rounds. We never store plaintext passwords.</li>
+      <li><strong>Access controls:</strong> Row-Level Security (RLS) enforced — your data is accessible only to your account.</li>
+    </ul>
+
+    <h2>5. Your Rights (GDPR / Data Subject Rights)</h2>
+    <ul>
+      <li><strong>Access:</strong> Download all your data — Settings → Privacy → Export My Data</li>
+      <li><strong>Deletion:</strong> Delete all health logs — Settings → Privacy → Health Logs → Delete All</li>
+      <li><strong>Account deletion:</strong> Settings → Privacy → Delete Account (permanent, immediate)</li>
+      <li><strong>AI chat history:</strong> Settings → Privacy → Delete Chat History</li>
+      <li><strong>Portability:</strong> All exports in standard JSON format</li>
+      <li><strong>Objection / restriction:</strong> Contact us at <a href="mailto:privacy@medintel.pro">privacy@medintel.pro</a></li>
+    </ul>
+
+    <h2>6. Cookies and Local Storage</h2>
+    <p>We use browser local storage solely to:</p>
+    <ul>
+      <li>Store your authentication token (session management)</li>
+      <li>Cache offline drug/glossary data for faster access without internet</li>
+      <li>Remember your theme preference (dark/light mode)</li>
+    </ul>
+    <p>We do <strong>not</strong> use advertising cookies, cross-site tracking cookies, or third-party analytics cookies.</p>
+
+    <h2>7. Third-Party Services</h2>
+    <p>MedIntel Pro fetches data from the following public, government-operated APIs. No user data is sent to these services:</p>
+    <ul>
+      <li>openFDA (FDA) — drug labels and recalls</li>
+      <li>RxNorm / DailyMed / MedlinePlus (NLM / NIH) — drug and disease data</li>
+      <li>WHO GHO API / WHO Disease Outbreak News — global health data</li>
+      <li>disease.sh — real-time outbreak statistics</li>
+      <li>PubMed E-utilities — open-access research metadata</li>
+    </ul>
+    <p>AI responses are powered by the <strong>Anthropic Claude API</strong>. Queries sent to the AI include only your question and retrieved database context — never your account details, health logs, or identity.</p>
+
+    <h2>8. Children's Privacy</h2>
+    <p>MedIntel Pro is intended for adults and healthcare professionals. We do not knowingly collect personal data from users under the age of 16. If you believe a minor has provided us with personal data, please contact <a href="mailto:privacy@medintel.pro">privacy@medintel.pro</a> and we will delete it immediately.</p>
+
+    <h2>9. Data Retention</h2>
+    <ul>
+      <li>Health logs: Retained until you delete them or delete your account</li>
+      <li>AI chat history: Retained until you delete it (opt-in only)</li>
+      <li>Uploaded files: Deleted within 24 hours of upload</li>
+      <li>Account data: Deleted immediately upon account deletion request</li>
+      <li>Anonymous analytics: Aggregated, retained for 12 months maximum</li>
+    </ul>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>We will notify registered users of material changes to this policy via email at least 14 days before they take effect. The "Last updated" date at the top of this page always reflects the current version.</p>
+
+    <div class="contact-box">
+      <h3>Privacy Contact</h3>
+      <p>For privacy requests, data deletion, or GDPR inquiries:</p>
+      <p>📧 <a href="mailto:privacy@medintel.pro">privacy@medintel.pro</a></p>
+      <p>📧 <a href="mailto:support@medintel.pro">support@medintel.pro</a></p>
+      <p style="margin-top:0.75rem; font-size:var(--fs-xs); color:var(--clr-text-muted);">
+        We respond to all privacy requests within 72 hours and fulfil data subject requests within 30 days as required by GDPR.
+      </p>
+    </div>
+
+  </article>
+</main>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__col">
+        <div class="footer__brand">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="6" fill="var(--clr-primary)"/>
+            <path d="M14 6v16M6 14h16" stroke="#060d0b" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <strong>MedIntel Pro</strong>
+        </div>
+        <p class="footer__tagline">Free medical intelligence. Always.</p>
+      </div>
+      <div class="footer__col">
+        <h3>Tools</h3>
+        <ul><li><a href="/drugs.html">Drug Lookup</a></li><li><a href="/calculators.html">Calculators</a></li><li><a href="/first-aid.html">First Aid</a></li><li><a href="/quiz.html">Quiz</a></li></ul>
+      </div>
+      <div class="footer__col">
+        <h3>Legal</h3>
+        <ul><li><a href="/privacy.html" aria-current="page">Privacy Policy</a></li><li><a href="mailto:support@medintel.pro">Contact Us</a></li></ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>⚠️ For reference only. Always consult a qualified healthcare professional for medical decisions.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const html = document.documentElement;
+    html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+</script>
+</body>
+</html>

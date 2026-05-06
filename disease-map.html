@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Live global disease heatmap — real-time outbreak tracking from WHO, CDC, and disease.sh. Free for everyone.">
+  <title>Disease Map — MedIntel Pro</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/map.css">
+  <!-- Leaflet.js for map rendering -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    .map-page { display: flex; flex-direction: column; height: calc(100vh - 64px); }
+    #disease-map { flex: 1; min-height: 400px; background: var(--clr-bg-surface); }
+    .map-controls {
+      display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;
+      padding: 0.75rem 1.25rem;
+      background: var(--clr-bg-raised);
+      border-bottom: 1px solid var(--clr-border-faint);
+    }
+    .map-controls select, .map-controls input[type="search"] {
+      background: var(--clr-bg-surface);
+      border: 1px solid var(--clr-border-mid);
+      color: var(--clr-text-primary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: var(--fs-sm);
+      font-family: var(--font-body);
+    }
+    .map-legend {
+      display: flex; gap: 1rem; align-items: center; font-size: var(--fs-xs);
+      color: var(--clr-text-secondary); flex-wrap: wrap;
+    }
+    .map-legend__item { display: flex; align-items: center; gap: 0.35rem; }
+    .map-legend__dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .map-stats-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0; border-bottom: 1px solid var(--clr-border-faint);
+      background: var(--clr-bg-deep);
+    }
+    .map-stat {
+      padding: 0.65rem 1.25rem; border-right: 1px solid var(--clr-border-faint);
+      display: flex; flex-direction: column; gap: 0.1rem;
+    }
+    .map-stat:last-child { border-right: none; }
+    .map-stat__label { font-size: var(--fs-xs); color: var(--clr-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .map-stat__value { font-size: var(--fs-md); font-weight: 700; color: var(--clr-primary); font-family: var(--font-mono); }
+    .map-sidebar {
+      position: absolute; top: 80px; right: 1rem; z-index: 1000;
+      width: 300px; background: var(--clr-bg-raised);
+      border: 1px solid var(--clr-border-mid);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      max-height: calc(100vh - 180px); overflow-y: auto;
+      display: none;
+    }
+    .map-sidebar.active { display: block; }
+    .map-sidebar__header {
+      padding: 0.9rem 1rem; border-bottom: 1px solid var(--clr-border-faint);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .map-sidebar__title { font-weight: 600; font-size: var(--fs-base); color: var(--clr-text-primary); }
+    .map-sidebar__close { background: none; border: none; color: var(--clr-text-muted); cursor: pointer; font-size: 1.2rem; padding: 0; }
+    .map-sidebar__body { padding: 1rem; }
+    .outbreak-list { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.75rem 1rem; }
+    .outbreak-item {
+      padding: 0.6rem 0.75rem; border-radius: 8px;
+      background: var(--clr-bg-surface); border: 1px solid var(--clr-border-subtle);
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    }
+    .outbreak-item:hover { border-color: var(--clr-border-mid); background: var(--clr-bg-overlay); }
+    .outbreak-item__name { font-weight: 600; font-size: var(--fs-sm); color: var(--clr-text-primary); }
+    .outbreak-item__meta { font-size: var(--fs-xs); color: var(--clr-text-muted); margin-top: 0.15rem; }
+    .outbreak-item__badge {
+      display: inline-block; padding: 0.1rem 0.45rem; border-radius: 99px;
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-top: 0.3rem;
+    }
+    .badge--danger  { background: var(--clr-danger-bg);  color: var(--clr-danger); }
+    .badge--warning { background: var(--clr-warning-bg); color: var(--clr-warning); }
+    .badge--info    { background: var(--clr-info-bg);    color: var(--clr-info); }
+    .map-loading {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      z-index: 500; display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+      color: var(--clr-text-secondary); font-size: var(--fs-sm); pointer-events: none;
+    }
+    .map-loading__spinner {
+      width: 36px; height: 36px; border: 3px solid var(--clr-border-faint);
+      border-top-color: var(--clr-primary); border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .map-page--wrapper { position: relative; flex: 1; display: flex; flex-direction: column; }
+    .map-alerts-panel {
+      padding: 0.75rem 1.25rem; background: var(--clr-bg-raised);
+      border-top: 1px solid var(--clr-border-faint); max-height: 160px; overflow-y: auto;
+    }
+    .map-alerts-panel h3 { font-size: var(--fs-sm); color: var(--clr-text-muted); margin: 0 0 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .alert-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.3rem 0.65rem; border-radius: 99px; font-size: var(--fs-xs); font-weight: 600;
+      background: var(--clr-danger-bg); color: var(--clr-danger);
+      border: 1px solid var(--clr-danger-border); margin: 0.2rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" aria-label="MedIntel Pro home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="var(--accent)"/>
+        <path d="M14 6v16M6 14h16" stroke="var(--bg-primary)" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span class="nav__logo-text">MedIntel<span class="nav__logo-pro">Pro</span></span>
+    </a>
+    <ul class="nav__links" role="list">
+      <li><a href="/drugs.html" class="nav__link">Drugs</a></li>
+      <li><a href="/calculators.html" class="nav__link">Calc</a></li>
+      <li><a href="/first-aid.html" class="nav__link nav__link--alert">First Aid</a></li>
+      <li><a href="/quiz.html" class="nav__link">Quiz</a></li>
+      <li><a href="/disease-map.html" class="nav__link nav__link--active" aria-current="page">Map</a></li>
+      <li><a href="/blog.html" class="nav__link">Blog</a></li>
+    </ul>
+    <div class="nav__actions">
+      <button class="nav__theme-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="icon-sun">
+          <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true" class="icon-moon">
+          <path d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5z" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </button>
+      <a href="/profile.html" class="btn btn--ghost btn--sm" id="nav-auth-btn">Sign in</a>
+      <button class="nav__mobile-menu" id="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content" class="map-page">
+
+  <!-- STATS BAR -->
+  <div class="map-stats-bar" id="map-stats-bar" aria-label="Global outbreak statistics">
+    <div class="map-stat">
+      <span class="map-stat__label">Active Outbreaks</span>
+      <span class="map-stat__value" id="stat-outbreaks">—</span>
+    </div>
+    <div class="map-stat">
+      <span class="map-stat__label">Countries Affected</span>
+      <span class="map-stat__value" id="stat-countries">—</span>
+    </div>
+    <div class="map-stat">
+      <span class="map-stat__label">Total Cases (tracked)</span>
+      <span class="map-stat__value" id="stat-cases">—</span>
+    </div>
+    <div class="map-stat">
+      <span class="map-stat__label">Data Updated</span>
+      <span class="map-stat__value" id="stat-updated">—</span>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="map-controls" role="toolbar" aria-label="Map controls">
+    <label for="disease-filter" class="sr-only">Filter by disease</label>
+    <select id="disease-filter" aria-label="Filter by disease">
+      <option value="">All diseases</option>
+      <option value="COVID-19">COVID-19</option>
+      <option value="Influenza">Influenza</option>
+      <option value="Mpox">Mpox</option>
+      <option value="Cholera">Cholera</option>
+      <option value="Dengue">Dengue</option>
+      <option value="Ebola">Ebola</option>
+      <option value="Measles">Measles</option>
+    </select>
+
+    <label for="severity-filter" class="sr-only">Filter by severity</label>
+    <select id="severity-filter" aria-label="Filter by severity">
+      <option value="">All severity levels</option>
+      <option value="high">High</option>
+      <option value="medium">Medium</option>
+      <option value="low">Low</option>
+    </select>
+
+    <button class="btn btn--ghost btn--sm" id="btn-show-alerts" aria-label="Show active WHO/CDC alerts">
+      🔔 WHO/CDC Alerts
+    </button>
+
+    <div class="map-legend" aria-label="Map legend">
+      <div class="map-legend__item">
+        <div class="map-legend__dot" style="background:#f56565"></div>
+        <span>High</span>
+      </div>
+      <div class="map-legend__item">
+        <div class="map-legend__dot" style="background:#f6ad55"></div>
+        <span>Medium</span>
+      </div>
+      <div class="map-legend__item">
+        <div class="map-legend__dot" style="background:#63b3ed"></div>
+        <span>Low</span>
+      </div>
+    </div>
+
+    <span style="margin-left:auto; font-size:var(--fs-xs); color:var(--clr-text-muted);">
+      Sources: WHO · CDC · disease.sh · ECDC — Updated hourly
+    </span>
+  </div>
+
+  <!-- MAP WRAPPER -->
+  <div class="map-page--wrapper">
+
+    <!-- Loading spinner -->
+    <div class="map-loading" id="map-loading" aria-live="polite">
+      <div class="map-loading__spinner" aria-hidden="true"></div>
+      <span>Loading outbreak data…</span>
+    </div>
+
+    <!-- Leaflet map container -->
+    <div id="disease-map" role="application" aria-label="Global disease outbreak map"></div>
+
+    <!-- Country detail sidebar -->
+    <aside class="map-sidebar" id="country-sidebar" aria-label="Country detail">
+      <div class="map-sidebar__header">
+        <span class="map-sidebar__title" id="sidebar-country-name">Country</span>
+        <button class="map-sidebar__close" id="sidebar-close-btn" aria-label="Close panel">×</button>
+      </div>
+      <div class="map-sidebar__body" id="sidebar-body">
+        <p style="color:var(--clr-text-muted); font-size:var(--fs-sm);">Select a marker to see details.</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ACTIVE WHO/CDC ALERTS STRIP -->
+  <div class="map-alerts-panel" id="alerts-panel" hidden>
+    <h3>Active WHO / CDC Alerts</h3>
+    <div id="alerts-chips">
+      <span class="alert-chip" role="status">Loading alerts…</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__col">
+        <div class="footer__brand">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="6" fill="var(--clr-primary)"/>
+            <path d="M14 6v16M6 14h16" stroke="#060d0b" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <strong>MedIntel Pro</strong>
+        </div>
+        <p class="footer__tagline">Live disease intelligence, free for everyone.</p>
+      </div>
+      <div class="footer__col">
+        <h3>Tools</h3>
+        <ul><li><a href="/drugs.html">Drug Lookup</a></li><li><a href="/calculators.html">Calculators</a></li><li><a href="/first-aid.html">First Aid</a></li><li><a href="/quiz.html">Quiz</a></li></ul>
+      </div>
+      <div class="footer__col">
+        <h3>Resources</h3>
+        <ul><li><a href="/disease-map.html">Disease Map</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/glossary.html">Glossary</a></li><li><a href="/trad-medicine.html">Traditional Med</a></li></ul>
+      </div>
+      <div class="footer__col">
+        <h3>Account</h3>
+        <ul><li><a href="/profile.html">Sign In</a></li><li><a href="/profile.html#register">Create Free Account</a></li><li><a href="/privacy.html">Privacy Policy</a></li></ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>⚠️ For reference only. Always consult a qualified healthcare professional for medical decisions.</p>
+      <p style="margin-top:0.35rem; font-size:var(--fs-xs);">Data sources: WHO, CDC, disease.sh, ECDC — <a href="mailto:support@medintel.pro">support@medintel.pro</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPnI=" crossorigin=""></script>
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/offline.js"></script>
+<script src="/js/map.js"></script>
+<script>
+  /* Theme toggle */
+  (function() {
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.addEventListener('click', () => {
+      const html = document.documentElement;
+      html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
+</body>
+</html>
