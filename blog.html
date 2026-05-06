@@ -222,6 +222,162 @@
     initFilters();
     initViewToggle();
   }
+
+  async function loadArticles(filters) {
+    const grid = document.getElementById('article-grid');
+    const countEl = document.getElementById('article-count');
+
+    try {
+      const articles = await window.MedIntel.BlogAPI.getArticles(filters);
+      renderArticles(articles);
+      countEl.textContent = `${articles.length} articles`;
+    } catch (err) {
+      console.warn('Load articles failed:', err);
+      // Use mock data for offline/demo
+      const mockArticles = getMockArticles(filters);
+      renderArticles(mockArticles);
+      countEl.textContent = `${mockArticles.length} articles`;
+    }
+  }
+
+  function renderArticles(articles) {
+    const grid = document.getElementById('article-grid');
+    grid.innerHTML = articles.map(article => `
+      <article class="post-card">
+        <div class="post-card__meta">
+          <span class="badge">${article.source}</span>
+          <span class="post-card__time">${new Date(article.pubDate).toLocaleDateString()}</span>
+        </div>
+        <h3 class="post-card__title">
+          <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+        </h3>
+        <p class="post-card__excerpt">${article.description.substring(0, 150)}...</p>
+        <a class="post-card__link" href="${article.link}" target="_blank" rel="noopener">Read more →</a>
+      </article>
+    `).join('');
+  }
+
+  async function loadBreakingAlert() {
+    try {
+      const alert = await window.MedIntel.BlogAPI.getBreakingAlert();
+      if (alert) {
+        const banner = document.getElementById('breaking-banner');
+        document.getElementById('breaking-banner-text').textContent = alert.title;
+        document.getElementById('breaking-banner-link').href = alert.link;
+        banner.hidden = false;
+      }
+    } catch (err) {
+      console.warn('Breaking alert failed:', err);
+      // Mock breaking alert
+      const mockAlert = getMockBreakingAlert();
+      if (mockAlert) {
+        const banner = document.getElementById('breaking-banner');
+        document.getElementById('breaking-banner-text').textContent = mockAlert.title;
+        document.getElementById('breaking-banner-link').href = mockAlert.link;
+        banner.hidden = false;
+      }
+    }
+  }
+
+  function initFilters() {
+    // Specialty filters
+    document.querySelectorAll('.filter-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('filter-pill--active'));
+        btn.classList.add('filter-pill--active');
+        const specialty = btn.dataset.specialty;
+        loadArticles({ specialty, sources: 'all', page: 1 });
+      });
+    });
+
+    // Source filters
+    document.querySelectorAll('input[name="source"]').forEach(input => {
+      input.addEventListener('change', () => {
+        const sources = Array.from(document.querySelectorAll('input[name="source"]:checked')).map(cb => cb.value);
+        loadArticles({ specialty: 'all', sources, page: 1 });
+      });
+    });
+  }
+
+  function initViewToggle() {
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('view-btn--active'));
+        btn.classList.add('view-btn--active');
+        const view = btn.dataset.view;
+        // Toggle view class on grid
+        const grid = document.getElementById('article-grid');
+        grid.className = `article-grid article-grid--${view}`;
+      });
+    });
+  }
+
+  function getMockArticles(filters) {
+    const allArticles = [
+      {
+        title: 'New COVID-19 Variant Shows Increased Transmissibility',
+        description: 'WHO reports a new SARS-CoV-2 variant with enhanced transmission capabilities detected in multiple countries. Early data suggests higher R0 value.',
+        source: 'WHO',
+        pubDate: '2024-05-06T10:00:00Z',
+        link: '#',
+        specialty: 'infectious'
+      },
+      {
+        title: 'Breakthrough in Alzheimer\'s Treatment',
+        description: 'NIH-funded study shows promising results for new monoclonal antibody therapy targeting amyloid plaques in early-stage Alzheimer\'s disease.',
+        source: 'NIH',
+        pubDate: '2024-05-05T14:30:00Z',
+        link: '#',
+        specialty: 'neurology'
+      },
+      {
+        title: 'Cardiovascular Risk in Young Adults',
+        description: 'CDC analysis reveals rising rates of hypertension and dyslipidemia among adults aged 18-35, linked to sedentary lifestyles and poor diet.',
+        source: 'CDC',
+        pubDate: '2024-05-04T09:15:00Z',
+        link: '#',
+        specialty: 'cardiology'
+      },
+      {
+        title: 'Antibiotic Resistance Trends 2024',
+        description: 'ECDC annual report highlights concerning increases in multidrug-resistant bacteria, particularly in hospital-acquired infections.',
+        source: 'ECDC',
+        pubDate: '2024-05-03T16:45:00Z',
+        link: '#',
+        specialty: 'infectious'
+      },
+      {
+        title: 'Mental Health Crisis in Healthcare Workers',
+        description: 'NEJM study documents high rates of burnout, anxiety, and depression among frontline healthcare workers during the pandemic.',
+        source: 'NEJM',
+        pubDate: '2024-05-02T11:20:00Z',
+        link: '#',
+        specialty: 'psychiatry'
+      },
+      {
+        title: 'Advances in Pediatric Cancer Treatment',
+        description: 'New targeted therapies show improved survival rates for childhood leukemia, with reduced long-term side effects compared to traditional chemotherapy.',
+        source: 'PubMed',
+        pubDate: '2024-05-01T13:10:00Z',
+        link: '#',
+        specialty: 'oncology'
+      }
+    ];
+
+    let filtered = allArticles;
+    if (filters.specialty && filters.specialty !== 'all') {
+      filtered = filtered.filter(a => a.specialty === filters.specialty);
+    }
+
+    return filtered;
+  }
+
+  function getMockBreakingAlert() {
+    return {
+      title: 'WHO Declares Global Health Emergency for New Viral Outbreak',
+      link: '#'
+    };
+  }
 </script>
 </body>
 </html>

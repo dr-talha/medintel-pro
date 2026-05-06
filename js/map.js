@@ -113,6 +113,11 @@ async function loadHeatmapData() {
     renderOutbreakList(data);
   } catch (err) {
     console.warn('[Map] Heatmap load error:', err.message);
+    // Use mock data for offline/demo
+    const mockData = getMockHeatmapData();
+    MapState.allData = mockData;
+    renderCircles(mockData);
+    renderOutbreakList(mockData);
   }
 }
 
@@ -121,14 +126,23 @@ async function loadOutbreakAlerts() {
     const alerts = await window.MedIntel.DiseaseAPI.getAlerts();
     MapState.alerts = alerts;
     renderAlertBanners(alerts);
-  } catch { /* non-critical */ }
+  } catch {
+    // Mock alerts
+    const mockAlerts = getMockAlerts();
+    MapState.alerts = mockAlerts;
+    renderAlertBanners(mockAlerts);
+  }
 }
 
 async function loadGlobalStats() {
   try {
     const stats = await window.MedIntel.DiseaseAPI.getGlobalStats();
     renderGlobalStats(stats);
-  } catch { /* non-critical */ }
+  } catch {
+    // Mock stats
+    const mockStats = getMockGlobalStats();
+    renderGlobalStats(mockStats);
+  }
 }
 
 /* ══════════════════════════════════════════
@@ -570,6 +584,91 @@ function destroyMap() {
   if (MapState.refreshInterval) clearInterval(MapState.refreshInterval);
   MapState.map?.remove();
   MapState.map = null;
+}
+
+/* ══════════════════════════════════════════
+   MOCK DATA FOR OFFLINE/DEMO
+   ══════════════════════════════════════════ */
+
+function getMockHeatmapData() {
+  return [
+    {
+      country: 'United States',
+      country_code: 'US',
+      latitude: 39.8283,
+      longitude: -98.5795,
+      disease_name: 'COVID-19',
+      case_count: 45000,
+      deaths: 1200,
+      last_updated: '2024-05-06T12:00:00Z'
+    },
+    {
+      country: 'India',
+      country_code: 'IN',
+      latitude: 20.5937,
+      longitude: 78.9629,
+      disease_name: 'COVID-19',
+      case_count: 32000,
+      deaths: 800,
+      last_updated: '2024-05-06T12:00:00Z'
+    },
+    {
+      country: 'Brazil',
+      country_code: 'BR',
+      latitude: -14.2350,
+      longitude: -51.9253,
+      disease_name: 'COVID-19',
+      case_count: 28000,
+      deaths: 600,
+      last_updated: '2024-05-06T12:00:00Z'
+    },
+    {
+      country: 'Germany',
+      country_code: 'DE',
+      latitude: 51.1657,
+      longitude: 10.4515,
+      disease_name: 'Influenza',
+      case_count: 1500,
+      deaths: 20,
+      last_updated: '2024-05-06T12:00:00Z'
+    },
+    {
+      country: 'Japan',
+      country_code: 'JP',
+      latitude: 36.2048,
+      longitude: 138.2529,
+      disease_name: 'Influenza',
+      case_count: 1200,
+      deaths: 15,
+      last_updated: '2024-05-06T12:00:00Z'
+    }
+  ];
+}
+
+function getMockAlerts() {
+  return [
+    {
+      title: 'COVID-19 Variant Detected',
+      severity: 'high',
+      region: 'Global',
+      description: 'New variant with increased transmissibility detected in multiple countries.'
+    },
+    {
+      title: 'Cholera Outbreak',
+      severity: 'medium',
+      region: 'Africa',
+      description: 'Ongoing cholera outbreak in several African nations.'
+    }
+  ];
+}
+
+function getMockGlobalStats() {
+  return {
+    active_outbreaks: 12,
+    countries_affected: 45,
+    total_cases: 125000,
+    last_updated: '2024-05-06T14:30:00Z'
+  };
 }
 
 /* ══════════════════════════════════════════

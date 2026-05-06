@@ -59,6 +59,81 @@ function initQuiz() {
   }
 }
 
+function initQuizHub() {
+  loadCategories();
+  bindModeSelector();
+  bindSpecialtySelector();
+  bindDifficultySelector();
+  bindDailyChallenge();
+  loadLeaderboard();
+}
+
+/* ── Specialty selector ── */
+function bindSpecialtySelector() {
+  document.querySelectorAll('.specialty-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.specialty-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+}
+
+/* ── Difficulty selector ── */
+function bindDifficultySelector() {
+  // Already handled by radio buttons
+}
+
+/* ── Mode selector ── */
+function selectMode(mode) {
+  QuizState.mode = mode;
+  // Update UI to show selected mode
+  document.querySelectorAll('.quiz-mode-card').forEach(card => {
+    card.classList.toggle('selected', card.onclick.toString().includes(mode));
+  });
+  // Show specialty selection
+  document.getElementById('specialty-selection').hidden = false;
+}
+
+/* ── Start quiz ── */
+async function startQuiz() {
+  const selectedSpecialty = document.querySelector('.specialty-card.selected')?.dataset.specialty || null;
+  const difficulty = document.querySelector('input[name="difficulty"]:checked')?.value || 'all';
+
+  const params = new URLSearchParams({
+    mode: QuizState.mode,
+    category: selectedSpecialty || '',
+    difficulty: difficulty === 'all' ? '' : difficulty,
+    limit: '10'
+  });
+
+  window.location.href = `/quiz-session.html?${params.toString()}`;
+}
+
+/* ── Daily challenge ── */
+function startDailyChallenge() {
+  window.location.href = '/quiz-session.html?mode=daily&category=daily&limit=10';
+}
+
+/* ── Load leaderboard ── */
+async function loadLeaderboard() {
+  const leaderboard = document.getElementById('leaderboard');
+  if (!leaderboard) return;
+
+  try {
+    const data = await window.MedIntel.QuizAPI.getLeaderboard();
+    leaderboard.innerHTML = data.slice(0, 10).map((entry, i) => `
+      <div class="leaderboard-entry">
+        <span class="leaderboard-entry__rank">#${i + 1}</span>
+        <span class="leaderboard-entry__name">${escapeHTML(entry.name)}</span>
+        <span class="leaderboard-entry__score">${entry.score}%</span>
+        <span class="leaderboard-entry__time">${entry.time}s</span>
+      </div>
+    `).join('');
+  } catch (err) {
+    leaderboard.innerHTML = '<p>Leaderboard unavailable</p>';
+  }
+}
+
 /* ── Load category cards ── */
 async function loadCategories() {
   const grid = document.getElementById('quiz-category-grid');

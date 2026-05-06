@@ -579,13 +579,17 @@ const RecallsModule = (() => {
       </div>`;
 
     try {
-      const recalls = await window.MedIntel.DrugAPI.getRecalls(50);
+      // Use FDA Drug Enforcement API
+      const response = await fetch('https://api.fda.gov/drug/enforcement.json?limit=10&sort=report_date:desc');
+      const data = await response.json();
+      const recalls = data.results || [];
       renderRecalls(recalls, container);
     } catch (err) {
+      console.warn('Recalls fetch failed:', err);
       container.innerHTML = `
         <div class="alert alert-warning">
           <span>⚠️</span>
-          <span>${escapeHTML(err.message)}</span>
+          <span>Unable to load recalls. Check your connection.</span>
         </div>`;
     }
   }
@@ -598,6 +602,19 @@ const RecallsModule = (() => {
 
     container.innerHTML = recalls.map(r => `
       <div class="recall-card" style="margin-bottom:12px;">
+        <div class="recall-card__header">
+          <span class="badge badge--danger">Recall</span>
+          <span class="recall-card__date">${new Date(r.report_date).toLocaleDateString()}</span>
+        </div>
+        <h4 class="recall-card__title">${escapeHTML(r.reason_for_recall)}</h4>
+        <p class="recall-card__product">${escapeHTML(r.product_description)}</p>
+        <div class="recall-card__meta">
+          <span>Classification: ${r.classification}</span>
+          <span>Status: ${r.status}</span>
+        </div>
+      </div>
+    `).join('');
+  }
         <div class="recall-card__class">${escapeHTML(r.recall_class || '?')}</div>
         <div style="flex:1;">
           <div style="font-weight:600;color:var(--clr-text-primary);font-size:var(--fs-sm);margin-bottom:4px;">
@@ -655,6 +672,284 @@ window.MedIntel.Drug = { DrugSearch, InteractionChecker, RecallsModule };
 /* Expose for inline onclick usage */
 window.DrugSearch        = DrugSearch;
 window.InteractionChecker = InteractionChecker;
+
+function initDrugPage() {
+  // Initialize main drug search
+  initMainDrugSearch();
+  // Initialize filters
+  initFilters();
+  // Initialize tabs
+  initTabSystem();
+  // Load recalls count
+  loadRecallsCount();
+}
+
+function initMainDrugSearch() {
+  const searchForm = document.getElementById('drug-search-form');
+  const searchInput = document.getElementById('drug-main-search');
+  const autocomplete = document.getElementById('drug-autocomplete');
+
+  if (!searchForm || !searchInput) return;
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim();
+    if (query.length < 2) {
+      hideAutocomplete();
+      return;
+    }
+    showAutocomplete(query);
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    handleAutocompleteKeys(e, searchInput, autocomplete);
+  });
+
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+    if (query) {
+      drugSearch(query);
+    }
+  });
+
+  // Click outside closes autocomplete
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.drug-search-wrap')) {
+      hideAutocomplete();
+    }
+  });
+}
+
+function showAutocomplete(query) {
+  // Mock autocomplete - in real app, fetch from API
+  const suggestions = [
+    'Metformin',
+    'Warfarin',
+    'Lisinopril',
+    'Atorvastatin',
+    'Amoxicillin',
+    'Aspirin',
+    'Ibuprofen',
+    'Omeprazole'
+  ].filter(s => s.toLowerCase().includes(query.toLowerCase()));
+
+  const autocomplete = document.getElementById('drug-autocomplete');
+  if (!autocomplete) return;
+
+  if (suggestions.length === 0) {
+    autocomplete.hidden = true;
+    return;
+  }
+
+  autocomplete.innerHTML = suggestions.map(s => `
+    <li role="option">
+      <button class="autocomplete-item" onclick="selectAutocomplete('${s}')">
+        ${escapeHTML(s)}
+      </button>
+    </li>
+  `).join('');
+
+  autocomplete.hidden = false;
+}
+
+function hideAutocomplete() {
+  const autocomplete = document.getElementById('drug-autocomplete');
+  if (autocomplete) autocomplete.hidden = true;
+}
+
+function handleAutocompleteKeys(e, input, autocomplete) {
+  // Basic keyboard navigation for autocomplete
+  if (e.key === 'Escape') {
+    hideAutocomplete();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const query = input.value.trim();
+    if (query) drugSearch(query);
+  }
+}
+
+function selectAutocomplete(drug) {
+  document.getElementById('drug-main-search').value = drug;
+  hideAutocomplete();
+  drugSearch(drug);
+}
+
+function drugSearch(query) {
+  const resultsEl = document.getElementById('drug-results');
+  const emptyEl = document.getElementById('search-empty');
+
+  emptyEl.hidden = true;
+  resultsEl.hidden = false;
+
+  // Show loading
+  document.getElementById('drug-list').innerHTML = `
+    <div style="text-align:center;padding:2rem;color:var(--clr-text-muted);">
+      <div class="spinner" style="margin:0 auto 1rem;"></div>
+      Searching drugs…
+    </div>`;
+
+  // Use RxNorm API for drug search
+  fetch(`https://rxnav.nlm.nih.gov/REST/drugs.json?name=${encodeURIComponent(query)}`)
+    .then(response => response.json())
+    .then(data => {
+      const drugs = data.drugGroup?.conceptGroup || [];
+      const results = drugs.flatMap(group => group.conceptProperties || [])
+        .slice(0, 20) // Limit results
+        .map(drug => ({
+          name: drug.synonym || drug.name,
+          rxcui: drug.rxcui,
+          generic: drug.name,
+          class: 'Unknown', // Would need additional API call
+          recalls: 0, // Would need FDA API
+          flags: []
+        }));
+
+      showDrugResults(results);
+    })
+    .catch(err => {
+      console.warn('Drug search failed:', err);
+      // Fallback to mock data
+      const mockResults = [
+        {
+          name: query,
+          generic: `${query} (generic)`,
+          class: 'Unknown',
+          rxcui: 'mock',
+          recalls: 0,
+          flags: []
+        }
+      ];
+      showDrugResults(mockResults);
+    });
+}
+
+function showDrugResults(results) {
+  const emptyEl = document.getElementById('search-empty');
+  const resultsEl = document.getElementById('drug-results');
+  const listEl = document.getElementById('drug-list');
+  const countEl = document.getElementById('drug-results-count');
+
+  if (!results || results.length === 0) {
+    emptyEl.hidden = false;
+    resultsEl.hidden = true;
+    return;
+  }
+
+  emptyEl.hidden = true;
+  resultsEl.hidden = false;
+  countEl.textContent = `${results.length} result${results.length === 1 ? '' : 's'}`;
+
+  listEl.innerHTML = results.map(drug => `
+    <li class="drug-item">
+      <button class="drug-item__btn" onclick="showDrugDetail('${drug.rxcui}')">
+        <div class="drug-item__header">
+          <span class="drug-item__name">${escapeHTML(drug.name)}</span>
+          <span class="drug-item__generic">${escapeHTML(drug.generic)}</span>
+        </div>
+        <div class="drug-item__meta">
+          <span class="drug-item__class">${escapeHTML(drug.class)}</span>
+          ${drug.recalls > 0 ? `<span class="badge badge--danger">Recall</span>` : ''}
+        </div>
+      </button>
+    </li>
+  `).join('');
+}
+
+function showDrugDetail(rxcui) {
+  const detailEl = document.getElementById('drug-detail');
+  const resultsEl = document.getElementById('drug-results');
+
+  resultsEl.hidden = true;
+  detailEl.hidden = false;
+
+  // Show loading
+  document.getElementById('drug-name').textContent = 'Loading…';
+  document.getElementById('drug-generic').textContent = '';
+  document.getElementById('drug-flags').innerHTML = '';
+  document.getElementById('drug-meta').innerHTML = '';
+
+  // Fetch drug details from RxNorm
+  fetch(`https://rxnav.nlm.nih.gov/REST/RxTerms/rxcui/${rxcui}/allinfo.json`)
+    .then(response => response.json())
+    .then(data => {
+      const info = data.rxtermsProperties;
+      if (info) {
+        document.getElementById('drug-name').textContent = info.brandName || info.fullName;
+        document.getElementById('drug-generic').textContent = info.fullGenericName || info.genericName;
+        document.getElementById('drug-flags').innerHTML = info.rxtermsDoseForm ? `<span class="badge">${info.rxtermsDoseForm}</span>` : '';
+        document.getElementById('drug-meta').innerHTML = `
+          <span>Strength: ${info.strength || 'N/A'}</span>
+          <span>Route: ${info.route || 'N/A'}</span>
+        `;
+      }
+    })
+    .catch(err => {
+      console.warn('Drug detail fetch failed:', err);
+      // Fallback
+      document.getElementById('drug-name').textContent = 'Drug Details';
+      document.getElementById('drug-generic').textContent = 'Information not available offline';
+    });
+}
+
+function showDrugResults() {
+  const detailEl = document.getElementById('drug-detail');
+  const resultsEl = document.getElementById('drug-results');
+
+  detailEl.hidden = true;
+  resultsEl.hidden = false;
+}
+
+function initFilters() {
+  const resetBtn = document.getElementById('reset-filters');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar input').forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+          input.checked = false;
+        }
+      });
+    });
+  }
+}
+
+function initTabSystem() {
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active from all tabs and panels
+      tabs.forEach(t => {
+        t.classList.remove('tab--active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      panels.forEach(p => p.classList.remove('tab-panel--active'));
+
+      // Add active to clicked tab and corresponding panel
+      tab.classList.add('tab--active');
+      tab.setAttribute('aria-selected', 'true');
+      const panelId = tab.getAttribute('aria-controls');
+      const panel = document.getElementById(panelId);
+      if (panel) panel.classList.add('tab-panel--active');
+    });
+  });
+}
+
+function loadRecallsCount() {
+  // Mock recalls count
+  const count = 5;
+  const badge = document.getElementById('recall-count-badge');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'inline' : 'none';
+  }
+}
+
+function escapeHTML(str) {
+  return String(str ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   DrugSearch.init();

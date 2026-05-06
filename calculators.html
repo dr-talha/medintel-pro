@@ -48,10 +48,9 @@
             <li><button class="calc-cat-btn calc-cat-btn--active" data-cat="all">All calculators</button></li>
             <li><button class="calc-cat-btn" data-cat="cardiology">❤ Cardiology</button></li>
             <li><button class="calc-cat-btn" data-cat="nephrology">🫘 Nephrology</button></li>
-            <li><button class="calc-cat-btn" data-cat="critical-care">⚡ Critical Care</button></li>
+            <li><button class="calc-cat-btn" data-cat="critical_care">⚡ Critical Care</button></li>
             <li><button class="calc-cat-btn" data-cat="obstetrics">🤰 Obstetrics</button></li>
             <li><button class="calc-cat-btn" data-cat="pharmacology">💊 Pharmacology</button></li>
-            <li><button class="calc-cat-btn" data-cat="pediatrics">👶 Pediatrics</button></li>
             <li><button class="calc-cat-btn" data-cat="general">📋 General</button></li>
             <li><button class="calc-cat-btn" data-cat="nutrition">🥗 Nutrition</button></li>
           </ul>
@@ -139,7 +138,7 @@
         </div>
 
         <!-- CRITICAL CARE -->
-        <div class="calc-section" data-cat="critical-care">
+        <div class="calc-section" data-cat="critical_care">
           <h2 class="calc-section__title">Critical Care</h2>
           <div class="calc-cards">
             <button class="calc-card" data-calc="sofa" aria-label="Open SOFA Score calculator">
@@ -255,8 +254,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     initTheme();
-    initCalculators();
-    loadRecentCalcs();
+    CalcModule.initPage();
+    CalcModule.loadRecentCalcs();
   });
 </script>
 </body>

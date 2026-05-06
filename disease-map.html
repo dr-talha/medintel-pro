@@ -286,6 +286,12 @@
 <script src="/js/offline.js"></script>
 <script src="/js/map.js"></script>
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    initTheme();
+    initMap();
+  });
+
   /* Theme toggle */
   (function() {
     const btn = document.getElementById('theme-toggle');

@@ -13,6 +13,14 @@ const API_CONFIG = {
   retryDelay: 800,
 };
 
+/* ── API Keys (set via environment variables) ── */
+const API_KEYS = {
+  disease_sh: window.DISEASE_SH_API_KEY || '', // Free API, no key required usually
+  openfda:    window.OPENFDA_API_KEY || '',    // Free API
+  newsapi:    window.NEWSAPI_KEY || '',        // Free tier available
+  // Add more as needed
+};
+
 /* ── Request State ── */
 const _pendingRequests = new Map();
 
@@ -178,58 +186,98 @@ const DrugAPI = {
 
 const DiseaseAPI = {
   /**
-   * Search disease encyclopedia
-   * GET /api/diseases/search?q=diabetes
+   * Get heatmap data — using disease.sh API (free)
    */
-  search(query) {
-    const q = encodeURIComponent(query.trim());
-    return api.get(`/api/diseases/search?q=${q}`, {
-      cacheKey: `disease-search-${query}`,
-    });
-  },
+  async getHeatmap(disease = null, limit = 500) {
+    try {
+      // Use disease.sh for COVID-19 data
+      const response = await fetch('https://disease.sh/v3/covid-19/countries');
+      const data = await response.json();
 
-  /**
-   * Get disease detail by ID or slug
-   */
-  getById(id) {
-    return api.get(`/api/diseases/${id}`);
-  },
-
-  /**
-   * Get heatmap data — all diseases or filtered
-   * GET /api/heatmap?disease=COVID-19
-   */
-  getHeatmap(disease = null, limit = 500) {
-    const params = new URLSearchParams({ limit });
-    if (disease) params.set('disease', disease);
-    return api.get(`/api/heatmap?${params.toString()}`, {
-      cacheKey: `heatmap-${disease || 'all'}`,
-    });
+      return data.map(country => ({
+        country: country.country,
+        country_code: country.countryInfo.iso2,
+        latitude: country.countryInfo.lat,
+        longitude: country.countryInfo.long,
+        case_count: country.cases,
+        active_cases: country.active,
+        recovered: country.recovered,
+        deaths: country.deaths,
+        disease_name: 'COVID-19',
+        severity: country.cases > 100000 ? 'high' : country.cases > 10000 ? 'medium' : 'low',
+        last_updated: country.updated
+      })).slice(0, limit);
+    } catch (err) {
+      console.warn('Disease heatmap API failed:', err);
+      return [];
+    }
   },
 
   /**
    * Get global aggregate stats
-   * GET /api/heatmap/stats
    */
-  getGlobalStats() {
-    return api.get('/api/heatmap/stats');
+  async getGlobalStats() {
+    try {
+      const response = await fetch('https://disease.sh/v3/covid-19/all');
+      const data = await response.json();
+      return {
+        total_cases: data.cases,
+        total_deaths: data.deaths,
+        total_recovered: data.recovered,
+        active_cases: data.active,
+        updated: data.updated
+      };
+    } catch (err) {
+      console.warn('Global stats API failed:', err);
+      return {};
+    }
   },
 
   /**
-   * Get WHO / CDC outbreak alerts
-   * GET /api/outbreaks/alerts
+   * Get WHO / CDC outbreak alerts — using RSS feeds
    */
-  getAlerts() {
-    return api.get('/api/outbreaks/alerts');
+  async getAlerts() {
+    try {
+      // Use WHO RSS feed
+      const response = await fetch('https://www.who.int/rss-feeds/news-english.xml');
+      const text = await response.text();
+      // Parse RSS (simplified)
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, 'text/xml');
+      const items = xml.querySelectorAll('item');
+
+      return Array.from(items).slice(0, 5).map(item => ({
+        title: item.querySelector('title').textContent,
+        description: item.querySelector('description').textContent,
+        link: item.querySelector('link').textContent,
+        date: item.querySelector('pubDate').textContent,
+        source: 'WHO'
+      }));
+    } catch (err) {
+      console.warn('Alerts API failed:', err);
+      return [];
+    }
   },
 
   /**
    * Get country detail
-   * GET /api/outbreaks/country/:code
    */
-  getCountry(countryCode, disease) {
-    const params = disease ? `?disease=${encodeURIComponent(disease)}` : '';
-    return api.get(`/api/outbreaks/country/${countryCode}${params}`);
+  async getCountry(countryCode, disease) {
+    try {
+      const response = await fetch(`https://disease.sh/v3/covid-19/countries/${countryCode}`);
+      const data = await response.json();
+      return {
+        country: data.country,
+        cases: data.cases,
+        deaths: data.deaths,
+        recovered: data.recovered,
+        active: data.active,
+        updated: data.updated
+      };
+    } catch (err) {
+      console.warn('Country API failed:', err);
+      return {};
+    }
   },
 };
 
@@ -237,7 +285,61 @@ const DiseaseAPI = {
    RAG / AI CHAT ENDPOINTS
    ══════════════════════════════════════════ */
 
-const ChatAPI = {
+const BlogAPI = {
+  /**
+   * Get articles from RSS feeds
+   */
+  async getArticles(filters = {}) {
+    try {
+      // Use WHO RSS as primary source
+      const response = await fetch('https://www.who.int/rss-feeds/news-english.xml');
+      const text = await response.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, 'text/xml');
+      const items = xml.querySelectorAll('item');
+
+      return Array.from(items).map(item => ({
+        title: item.querySelector('title').textContent,
+        description: item.querySelector('description').textContent,
+        link: item.querySelector('link').textContent,
+        pubDate: item.querySelector('pubDate').textContent,
+        source: 'WHO',
+        specialty: 'public-health', // Default
+        type: 'news'
+      }));
+    } catch (err) {
+      console.warn('Blog API failed:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Get breaking alerts
+   */
+  async getBreakingAlert() {
+    try {
+      // Check WHO emergency RSS
+      const response = await fetch('https://www.who.int/rss-feeds/emergency-english.xml');
+      const text = await response.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, 'text/xml');
+      const items = xml.querySelectorAll('item');
+
+      if (items.length > 0) {
+        const latest = items[0];
+        return {
+          title: latest.querySelector('title').textContent,
+          description: latest.querySelector('description').textContent,
+          link: latest.querySelector('link').textContent,
+          urgent: true
+        };
+      }
+    } catch (err) {
+      console.warn('Breaking alert API failed:', err);
+    }
+    return null;
+  },
+};
   /**
    * Send a question to the RAG-powered AI
    * POST /api/chat
@@ -602,6 +704,7 @@ Object.assign(window.MedIntel, {
   api,
   DrugAPI,
   DiseaseAPI,
+  BlogAPI,
   ChatAPI,
   QuizAPI,
   CalculatorAPI,

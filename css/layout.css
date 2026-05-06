@@ -614,6 +614,78 @@
   color: var(--clr-accent-teal);
 }
 
+/* ── Sidebar ── */
+.sidebar {
+  background: var(--clr-bg-raised);
+  border: 1px solid var(--clr-border-mid);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  height: fit-content;
+  position: sticky;
+  top: var(--sp-6);
+}
+
+.sidebar__section {
+  margin-bottom: var(--sp-8);
+}
+
+.sidebar__section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar__heading {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--clr-text-primary);
+  margin-bottom: var(--sp-4);
+}
+
+.sidebar__heading--sm {
+  font-size: var(--fs-sm);
+  color: var(--clr-text-secondary);
+  margin-bottom: var(--sp-3);
+}
+
+.sidebar__links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.sidebar__links--pill .calc-cat-btn {
+  width: 100%;
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-lg);
+  background: transparent;
+  border: 1px solid var(--clr-border-faint);
+  color: var(--clr-text-secondary);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: all var(--dur-fast);
+}
+
+.sidebar__links--pill .calc-cat-btn:hover {
+  background: var(--clr-bg-surface);
+  border-color: var(--clr-border-mid);
+  color: var(--clr-text-primary);
+}
+
+.sidebar__links--pill .calc-cat-btn--active {
+  background: var(--clr-primary);
+  border-color: var(--clr-primary);
+  color: var(--clr-text-inverse);
+}
+
+.sidebar__links--pill .calc-cat-btn--active:hover {
+  background: var(--clr-accent-mint);
+  border-color: var(--clr-accent-mint);
+}
+
 /* ── Footer ── */
 .footer {
   background: var(--clr-bg-surface);

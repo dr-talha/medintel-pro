@@ -379,6 +379,208 @@ function initCalculators() {
   if (calcId && CALCULATORS[calcId]) openCalculator(calcId);
 }
 
+// Add new init for calculators.html page
+function initCalculatorsPage() {
+  // Bind sidebar category buttons
+  document.querySelectorAll('.calc-cat-btn[data-cat]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      filterByCategory(cat);
+      // Update active state
+      document.querySelectorAll('.calc-cat-btn').forEach(b => b.classList.remove('calc-cat-btn--active'));
+      btn.classList.add('calc-cat-btn--active');
+    });
+  });
+
+  // Bind calc-card clicks
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.calc-card');
+    if (card && card.dataset.calc) {
+      openCalculatorPanel(card.dataset.calc);
+    }
+  });
+
+  // Bind back button
+  const backBtn = document.getElementById('calc-back-btn');
+  if (backBtn) {
+    backBtn.addEventListener('click', closeCalculatorPanel);
+  }
+
+  // Bind search
+  const searchInput = document.getElementById('calc-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchCalculators(e.target.value);
+    });
+  }
+
+  // Show all by default
+  filterByCategory('all');
+}
+
+function filterByCategory(category) {
+  const sections = document.querySelectorAll('.calc-section');
+  sections.forEach(section => {
+    if (category === 'all' || section.dataset.cat === category) {
+      section.style.display = 'block';
+    } else {
+      section.style.display = 'none';
+    }
+  });
+}
+
+function searchCalculators(query) {
+  const cards = document.querySelectorAll('.calc-card');
+  const lowerQuery = query.toLowerCase();
+
+  cards.forEach(card => {
+    const name = card.querySelector('.calc-card__name').textContent.toLowerCase();
+    const desc = card.querySelector('.calc-card__desc').textContent.toLowerCase();
+    const tag = card.querySelector('.calc-card__tag').textContent.toLowerCase();
+
+    const matches = name.includes(lowerQuery) || desc.includes(lowerQuery) || tag.includes(lowerQuery);
+    card.style.display = matches || !query ? 'block' : 'none';
+  });
+
+  // Show/hide sections based on visible cards
+  const sections = document.querySelectorAll('.calc-section');
+  sections.forEach(section => {
+    const visibleCards = section.querySelectorAll('.calc-card[style*="block"]');
+    section.style.display = visibleCards.length > 0 || !query ? 'block' : 'none';
+  });
+}
+
+function openCalculatorPanel(calcId) {
+  const calc = CALCULATORS[calcId];
+  if (!calc) return;
+
+  const panel = document.getElementById('calc-panel');
+  const inner = document.getElementById('calc-panel-inner');
+  if (!panel || !inner) return;
+
+  // Render calculator form
+  inner.innerHTML = `
+    <div class="calc-header">
+      <h2>${escapeHTML(calc.name)}</h2>
+      <p>${escapeHTML(calc.desc)}</p>
+    </div>
+    <form class="calc-form" id="calc-form-${calcId}">
+      ${calc.fields.map(field => buildFieldHTML(field)).join('')}
+      <button type="button" class="btn btn-primary btn-full" onclick="computeAndShowResult('${calcId}')">
+        Calculate
+      </button>
+    </form>
+    <div id="calc-result-${calcId}" class="calc-result-container"></div>
+  `;
+
+  panel.removeAttribute('hidden');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function closeCalculatorPanel() {
+  const panel = document.getElementById('calc-panel');
+  if (panel) {
+    panel.setAttribute('hidden', '');
+  }
+}
+
+function computeAndShowResult(calcId) {
+  const calc = CALCULATORS[calcId];
+  if (!calc) return;
+
+  const form = document.getElementById(`calc-form-${calcId}`);
+  const resultEl = document.getElementById(`calc-result-${calcId}`);
+  if (!form || !resultEl) return;
+
+  // Collect values
+  const values = {};
+  let hasErrors = false;
+
+  calc.fields.forEach(field => {
+    const el = form.querySelector(`[name="${field.id}"]`);
+    if (!el) return;
+
+    if (field.type === 'boolean') {
+      values[field.id] = el.checked;
+    } else if (field.type === 'select') {
+      values[field.id] = el.value;
+    } else {
+      const val = parseFloat(el.value);
+      if (isNaN(val)) {
+        el.classList.add('form-input--error');
+        hasErrors = true;
+      } else {
+        el.classList.remove('form-input--error');
+        values[field.id] = val;
+      }
+    }
+  });
+
+  if (hasErrors) {
+    showToast('Please fill in all required fields.', 'warning');
+    return;
+  }
+
+  try {
+    const result = calc.compute(values);
+    renderResultInPanel(result, calc.name, resultEl);
+  } catch (err) {
+    showToast('Calculation error: ' + err.message, 'warning');
+  }
+}
+
+function renderResultInPanel(result, calcName, container) {
+  const colorMap = {
+    success: 'var(--clr-success)',
+    warning: 'var(--clr-warning)',
+    danger:  'var(--clr-danger)',
+    info:    'var(--clr-info)',
+  };
+
+  const color = colorMap[result.color] || 'var(--clr-primary)';
+
+  container.innerHTML = `
+    <div class="calc-result">
+      <div class="calc-result__label">${escapeHTML(calcName)}</div>
+      <div>
+        <span class="calc-result__value" style="color:${color};">
+          ${escapeHTML(String(result.result))}
+        </span>
+        <span class="calc-result__unit">${escapeHTML(result.unit || '')}</span>
+      </div>
+      <div class="calc-result__interpretation"
+           style="background:${color}22;color:${color};border-radius:var(--r-md);padding:10px 16px;margin-top:12px;">
+        ${escapeHTML(result.interpretation || '')}
+      </div>
+      <div class="disclaimer-strip" style="margin-top:16px;text-align:left;">
+        All calculators use validated clinical formulas. Verify results with clinical judgment.
+      </div>
+    </div>
+  `;
+
+  container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  container.querySelector('.calc-result')?.classList.add('anim-scale-in');
+}
+
+function loadRecentCalcs() {
+  // Mock recent calculations - in real app, load from localStorage or API
+  const recent = [
+    { id: 'bmi', name: 'BMI Calculator', time: '2 hours ago' },
+    { id: 'chads_vasc', name: 'CHA₂DS₂-VASc Score', time: '1 day ago' },
+    { id: 'gfr', name: 'eGFR Calculator', time: '3 days ago' }
+  ];
+
+  const container = document.getElementById('recent-calcs');
+  if (!container) return;
+
+  container.innerHTML = recent.map(calc => `
+    <button class="recent-calc-item" onclick="openCalculatorPanel('${calc.id}')">
+      <span class="recent-calc-name">${escapeHTML(calc.name)}</span>
+      <span class="recent-calc-time">${escapeHTML(calc.time)}</span>
+    </button>
+  `).join('');
+}
+
 function renderCategoryGrid() {
   const grid = document.getElementById('calc-category-grid');
   if (!grid) return;
@@ -631,9 +833,14 @@ function showToast(message, type = 'info') {
 
 const CalcModule = {
   init:           initCalculators,
+  initPage:       initCalculatorsPage,
   openCategory,
   openCalculator,
+  openCalculatorPanel,
+  closeCalculatorPanel,
   computeCalc,
+  computeAndShowResult,
+  loadRecentCalcs,
   CALCULATORS,
 };
 
