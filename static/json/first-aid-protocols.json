@@ -1,0 +1,125 @@
+[
+  {
+    "id": "cpr-adult",
+    "title": "Adult CPR",
+    "category": "cardiac",
+    "icon": "❤️",
+    "emergency": true,
+    "steps": [
+      { "step": 1, "title": "Check for Safety", "text": "Ensure the scene is safe for you and the victim. Put on gloves if available.", "duration": null },
+      { "step": 2, "title": "Check Responsiveness", "text": "Tap the person's shoulders firmly and shout 'Are you OK?'. Look for normal breathing.", "duration": 10 },
+      { "step": 3, "title": "Call Emergency Services", "text": "Call 911 (or your local emergency number). Ask a bystander to get an AED if available.", "duration": null },
+      { "step": 4, "title": "Position the Person", "text": "Place the person on their back on a firm, flat surface. Kneel beside them.", "duration": null },
+      { "step": 5, "title": "Hand Position", "text": "Place the heel of one hand on the centre of the chest (lower half of sternum). Place your other hand on top, fingers interlaced.", "duration": null },
+      { "step": 6, "title": "Chest Compressions", "text": "Push hard and fast — compress at least 5 cm (2 inches). Allow full chest recoil between compressions. Rate: 100–120 compressions/minute.", "duration": null, "rate": "100-120/min" },
+      { "step": 7, "title": "Rescue Breaths (if trained)", "text": "After 30 compressions, give 2 rescue breaths: tilt head, lift chin, pinch nose, seal mouth, breathe for 1 second each watching for chest rise.", "duration": null },
+      { "step": 8, "title": "Continue 30:2 cycle", "text": "Continue 30 compressions : 2 breaths until AED arrives, EMS takes over, or the person shows signs of life.", "duration": null }
+    ],
+    "notes": "If untrained or unwilling to give breaths, perform compression-only CPR continuously at 100–120/min until EMS arrives."
+  },
+  {
+    "id": "cpr-child",
+    "title": "Child CPR (1–8 years)",
+    "category": "cardiac",
+    "icon": "👶",
+    "emergency": true,
+    "steps": [
+      { "step": 1, "title": "Ensure Safety", "text": "Check the scene is safe. Approach the child carefully.", "duration": null },
+      { "step": 2, "title": "Check Responsiveness", "text": "Tap the child's shoulder and shout their name. Check for breathing — no more than 10 seconds.", "duration": 10 },
+      { "step": 3, "title": "Call for Help", "text": "Send someone to call emergency services. If alone, perform 2 minutes of CPR first, then call.", "duration": null },
+      { "step": 4, "title": "Open Airway", "text": "Tilt head back gently, lift chin to open the airway.", "duration": null },
+      { "step": 5, "title": "Give 2 Rescue Breaths", "text": "Seal your mouth over the child's mouth and nose. Give 2 gentle breaths, 1 second each. Chest should rise visibly.", "duration": null },
+      { "step": 6, "title": "Compressions", "text": "Use 1–2 hands. Compress 1/3 depth of chest (~5 cm). 30 compressions at 100–120/min.", "duration": null },
+      { "step": 7, "title": "Continue 30:2", "text": "Alternate 30 compressions and 2 breaths until AED is available or EMS arrives.", "duration": null }
+    ]
+  },
+  {
+    "id": "choking-adult",
+    "title": "Choking — Adult",
+    "category": "choking",
+    "icon": "🫁",
+    "emergency": true,
+    "steps": [
+      { "step": 1, "title": "Assess Severity", "text": "Ask 'Are you choking?' If they can cough, speak, or breathe — encourage coughing. Do NOT intervene yet.", "duration": null },
+      { "step": 2, "title": "Severe — 5 Back Blows", "text": "Stand beside and slightly behind them. Support chest with one hand. Give 5 firm back blows between shoulder blades with heel of your hand.", "duration": null },
+      { "step": 3, "title": "Check After Each Blow", "text": "Check if obstruction is cleared after each blow. Stop if object is expelled.", "duration": null },
+      { "step": 4, "title": "5 Abdominal Thrusts (Heimlich)", "text": "Stand behind them, arms around waist. Place one fist (thumb side in) above navel, below ribcage. Grasp with other hand. Pull sharply inward and upward. Repeat up to 5 times.", "duration": null },
+      { "step": 5, "title": "Alternate until clear", "text": "Alternate 5 back blows and 5 abdominal thrusts until object is expelled or person loses consciousness.", "duration": null },
+      { "step": 6, "title": "If Unconscious", "text": "Lower them carefully to ground. Call emergency services immediately. Begin CPR — each time you open the airway, look for and remove any visible obstruction.", "duration": null }
+    ]
+  },
+  {
+    "id": "anaphylaxis",
+    "title": "Anaphylaxis",
+    "category": "allergy",
+    "icon": "⚠️",
+    "emergency": true,
+    "steps": [
+      { "step": 1, "title": "Call Emergency Services Immediately", "text": "Call 911 NOW. Anaphylaxis is life-threatening. Do not wait to see if symptoms improve.", "duration": null },
+      { "step": 2, "title": "Use Epinephrine Auto-Injector", "text": "If available (EpiPen / Auvi-Q): Remove safety cap. Press firmly to outer thigh (through clothing if needed). Hold for 3 seconds. Remove. Note time.", "duration": 3 },
+      { "step": 3, "title": "Position the Person", "text": "Lay person flat with legs elevated UNLESS breathing difficulty — then have them sit upright. If unconscious and breathing, recovery position.", "duration": null },
+      { "step": 4, "title": "Second Dose if Needed", "text": "If symptoms persist after 5–15 minutes and a second auto-injector is available, administer a second dose.", "duration": 300 },
+      { "step": 5, "title": "Monitor Breathing", "text": "Stay with the person. If they stop breathing, begin CPR.", "duration": null },
+      { "step": 6, "title": "Hospital Required", "text": "All anaphylaxis patients need hospital observation — even after epinephrine. Biphasic reactions can occur hours later.", "duration": null }
+    ],
+    "notes": "Signs: hives, throat swelling, difficulty breathing, drop in blood pressure, vomiting, rapid pulse, loss of consciousness."
+  },
+  {
+    "id": "stroke-fast",
+    "title": "Stroke — FAST Protocol",
+    "category": "neurological",
+    "icon": "🧠",
+    "emergency": true,
+    "steps": [
+      { "step": 1, "title": "F — Face Drooping", "text": "Ask them to smile. Does one side of the face droop or appear uneven?", "duration": null },
+      { "step": 2, "title": "A — Arm Weakness", "text": "Ask them to raise both arms. Does one arm drift downward or feel weak?", "duration": null },
+      { "step": 3, "title": "S — Speech Difficulty", "text": "Ask them to repeat a simple phrase. Is speech slurred, strange, or impossible?", "duration": null },
+      { "step": 4, "title": "T — Time to Call", "text": "If ANY of the above signs are present — call emergency services IMMEDIATELY. Note the time symptoms started.", "duration": null },
+      { "step": 5, "title": "While Waiting", "text": "Keep them comfortable and calm. Do NOT give food or water. Do NOT give aspirin unless directed by paramedics. Lay flat unless vomiting — then recovery position.", "duration": null }
+    ],
+    "notes": "Time is critical — every minute counts. 'Time is brain' — the sooner treatment starts, the better the outcome."
+  },
+  {
+    "id": "burns",
+    "title": "Burns — Immediate Care",
+    "category": "trauma",
+    "icon": "🔥",
+    "emergency": false,
+    "steps": [
+      { "step": 1, "title": "Remove from Source", "text": "Stop the burning. Remove the person from the heat source, or extinguish flames safely. Remove hot jewellery and clothing (unless stuck to skin).", "duration": null },
+      { "step": 2, "title": "Cool the Burn", "text": "Run cool (NOT cold/ice) running water over burn for 20 minutes. Do NOT use ice, butter, toothpaste, or any creams.", "duration": 1200 },
+      { "step": 3, "title": "Cover Loosely", "text": "Cover with a sterile dressing, cling wrap, or clean cloth. Do NOT wrap tightly.", "duration": null },
+      { "step": 4, "title": "Assess Severity", "text": "Seek emergency care for: burns larger than palm size, burns on face/hands/genitals/joints, deep burns (white/charred), chemical/electrical burns, burns in children.", "duration": null },
+      { "step": 5, "title": "Pain Relief", "text": "OTC paracetamol or ibuprofen for pain if tolerated. Seek medical attention for all but minor burns.", "duration": null }
+    ]
+  },
+  {
+    "id": "bleeding",
+    "title": "Severe Bleeding",
+    "category": "trauma",
+    "icon": "🩸",
+    "emergency": true,
+    "steps": [
+      { "step": 1, "title": "Call Emergency Services", "text": "For severe / uncontrolled bleeding, call 911 immediately.", "duration": null },
+      { "step": 2, "title": "Apply Direct Pressure", "text": "Use a clean cloth, sterile pad, or bare hands if necessary. Press firmly and continuously on the wound.", "duration": null },
+      { "step": 3, "title": "Maintain Pressure", "text": "Do NOT remove the cloth — if it soaks through, add more on top. Continue pressing for at least 10 minutes.", "duration": 600 },
+      { "step": 4, "title": "Tourniquet (limbs only)", "text": "For severe limb bleeding not controlled by pressure: apply tourniquet 5–8 cm above wound. Tighten until bleeding stops. Note time applied. Do NOT remove.", "duration": null },
+      { "step": 5, "title": "Position", "text": "If possible and no spinal injury suspected, raise the injured limb above heart level.", "duration": null }
+    ]
+  },
+  {
+    "id": "seizure",
+    "title": "Seizure Management",
+    "category": "neurological",
+    "icon": "⚡",
+    "emergency": false,
+    "steps": [
+      { "step": 1, "title": "Protect from Injury", "text": "Clear the area of hard/sharp objects. Cushion the head. Do NOT restrain the person.", "duration": null },
+      { "step": 2, "title": "Position", "text": "Gently turn them onto their side (recovery position) to prevent aspiration if vomiting occurs.", "duration": null },
+      { "step": 3, "title": "Time the Seizure", "text": "Note start and end time. Call emergency services if seizure lasts more than 5 minutes.", "duration": null },
+      { "step": 4, "title": "Do NOT Put Anything in Mouth", "text": "Never put anything in the person's mouth — this is dangerous and unnecessary.", "duration": null },
+      { "step": 5, "title": "After the Seizure", "text": "Keep them in recovery position. Speak calmly. They may be confused for several minutes. Stay with them.", "duration": null },
+      { "step": 6, "title": "When to Call Emergency Services", "text": "Call if: seizure lasts > 5 min, second seizure follows, person doesn't regain consciousness, injury occurred, first seizure ever, person is pregnant or diabetic.", "duration": null }
+    ]
+  }
+]
