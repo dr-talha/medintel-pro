@@ -402,7 +402,19 @@
 <script src="/js/api.js"></script>
 <script src="/js/chat.js"></script>
 <script src="/js/drug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
 <script>
+  // Global error handlers
+  window.addEventListener('unhandledrejection', event => {
+    console.error('Unhandled promise rejection:', event.reason);
+    // Prevent default browser handling
+    event.preventDefault();
+  });
+
+  window.addEventListener('error', event => {
+    console.error('Global error:', event.error);
+  });
+
   // Init page
   document.addEventListener('DOMContentLoaded', () => {
     initNav();

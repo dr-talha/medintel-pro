@@ -209,3 +209,107 @@ if (document.readyState === 'loading') {
 } else {
   authInit();
 }
+
+/* ── Direct window exports for onclick handlers ── */
+window.signIn = authSignIn;
+window.signOut = authSignOut;
+window.register = authRegister;
+window.sendMagicLink = authSendMagicLink;
+
+/* ── Profile page functions ── */
+function showSection(sectionName) {
+  // Hide all sections
+  document.querySelectorAll('.account-section').forEach(section => {
+    section.classList.remove('account-section--active');
+    section.hidden = true;
+  });
+  // Show selected section
+  const targetSection = document.getElementById('section-' + sectionName);
+  if (targetSection) {
+    targetSection.classList.add('account-section--active');
+    targetSection.hidden = false;
+  }
+  // Update nav buttons
+  document.querySelectorAll('.account-nav-btn').forEach(btn => {
+    btn.classList.remove('account-nav-btn--active');
+  });
+  const navBtn = document.querySelector(`[data-section="${sectionName}"]`);
+  if (navBtn) navBtn.classList.add('account-nav-btn--active');
+}
+
+function switchAuthTab(tab) {
+  if (tab === 'register') {
+    document.getElementById('auth-tab-signin').classList.remove('auth-tab--active');
+    document.getElementById('auth-tab-register').classList.add('auth-tab--active');
+    document.getElementById('auth-signin').hidden = true;
+    document.getElementById('auth-register').hidden = false;
+  } else {
+    document.getElementById('auth-tab-register').classList.remove('auth-tab--active');
+    document.getElementById('auth-tab-signin').classList.add('auth-tab--active');
+    document.getElementById('auth-register').hidden = true;
+    document.getElementById('auth-signin').hidden = false;
+  }
+}
+
+function deleteChatHistory() {
+  if (confirm('Delete all AI chat history? This cannot be undone.')) {
+    // Implement delete
+    console.log('Delete chat history');
+  }
+}
+
+function deleteAllHealthLogs() {
+  if (confirm('Delete all health logs? This cannot be undone.')) {
+    // Implement delete
+    console.log('Delete all health logs');
+  }
+}
+
+function deleteAccount() {
+  if (confirm('Permanently delete your account and all data? This cannot be undone.')) {
+    // Implement delete
+    console.log('Delete account');
+  }
+}
+
+function exportAllData() {
+  // Implement export
+  console.log('Export all data');
+}
+
+function exportHealthLogs() {
+  // Implement export
+  console.log('Export health logs');
+}
+
+function downloadOfflineData(type) {
+  // Implement download
+  console.log('Download offline data:', type);
+}
+
+function downloadAllOfflineData() {
+  // Implement download all
+  console.log('Download all offline data');
+}
+
+function saveNotificationSettings() {
+  // Implement save
+  console.log('Save notification settings');
+}
+
+function openNewLogModal() {
+  // Implement modal
+  console.log('Open new log modal');
+}
+
+window.showSection = showSection;
+window.switchAuthTab = switchAuthTab;
+window.deleteChatHistory = deleteChatHistory;
+window.deleteAllHealthLogs = deleteAllHealthLogs;
+window.deleteAccount = deleteAccount;
+window.exportAllData = exportAllData;
+window.exportHealthLogs = exportHealthLogs;
+window.downloadOfflineData = downloadOfflineData;
+window.downloadAllOfflineData = downloadAllOfflineData;
+window.saveNotificationSettings = saveNotificationSettings;
+window.openNewLogModal = openNewLogModal;

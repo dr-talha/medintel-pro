@@ -209,12 +209,20 @@
 </footer>
 
 <script src="/js/api.js"></script>
+<script src="/js/blog.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     initNav();
     initTheme();
     initBlogPage();
   });
+
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
 
   function initBlogPage() {
     loadArticles({ specialty: 'all', sources: 'all', page: 1 });
@@ -245,13 +253,13 @@
     grid.innerHTML = articles.map(article => `
       <article class="post-card">
         <div class="post-card__meta">
-          <span class="badge">${article.source}</span>
+          <span class="badge">${escapeHTML(article.source)}</span>
           <span class="post-card__time">${new Date(article.pubDate).toLocaleDateString()}</span>
         </div>
         <h3 class="post-card__title">
-          <a href="${article.link}" target="_blank" rel="noopener">${article.title}</a>
+          <a href="${article.link}" target="_blank" rel="noopener">${escapeHTML(article.title)}</a>
         </h3>
-        <p class="post-card__excerpt">${article.description.substring(0, 150)}...</p>
+        <p class="post-card__excerpt">${escapeHTML(article.description.substring(0, 150))}...</p>
         <a class="post-card__link" href="${article.link}" target="_blank" rel="noopener">Read more →</a>
       </article>
     `).join('');

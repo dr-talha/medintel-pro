@@ -958,4 +958,17 @@ window.MedIntel   = window.MedIntel || {};
 window.MedIntel.Quiz = QuizEngine;
 window.QuizEngine    = QuizEngine;   /* inline onclick access */
 
+/* ── Direct exports for onclick handlers ── */
+window.startDailyChallenge = startDailyChallenge;
+window.selectMode = selectMode;
+window.startQuiz = startQuiz;
+window.exitQuiz = exitQuiz;
+window.nextQuestion = nextQuestion;
+window.flagQuestion = flagQuestion;
+window.reviewAnswers = reviewAnswers;
+window.retakeQuiz = retakeQuiz;
+window.shareResult = shareResult;
+window.exitToHub = () => window.location.href = '/quiz.html';
+window.downloadCertificate = downloadCMECertificate;
+
 document.addEventListener('DOMContentLoaded', initQuiz);

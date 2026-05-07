@@ -406,7 +406,7 @@ function buildMessageEl(msg) {
   const textEl = document.createElement('div');
   textEl.className = 'message__text';
   textEl.innerHTML = msg.role === 'ai'
-    ? formatAIResponse(msg.text)
+    ? DOMPurify.sanitize(formatAIResponse(msg.text))
     : escapeHTML(msg.text);
   bubble.appendChild(textEl);
 
@@ -1026,6 +1026,26 @@ window.MedIntel.Chat = {
   appendMessage,
   ChatState,
 };
+
+/* ── Direct exports for onclick handlers ── */
+function clearChat() {
+  ChatState.messages = [];
+  if (DOM.feed) DOM.feed.innerHTML = '';
+  if (DOM.input) DOM.input.value = '';
+  startNewChat();
+}
+
+function sendSuggestion(text) {
+  if (DOM.input) {
+    DOM.input.value = text;
+    autoResizeTextarea();
+    updateSendBtnState();
+    handleSend();
+  }
+}
+
+window.clearChat = clearChat;
+window.sendSuggestion = sendSuggestion;
 
 /* Auto-init */
 document.addEventListener('DOMContentLoaded', () => {

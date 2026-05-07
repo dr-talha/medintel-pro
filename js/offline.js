@@ -252,6 +252,34 @@ const Offline = {
 window.MedIntel = window.MedIntel || {};
 window.MedIntel.offline = Offline;
 
+/* ── First-aid specific functions ── */
+function callEmergency() {
+  // Detect user's location and show emergency numbers
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      // In a real app, use reverse geocoding to get country
+      // For now, show generic emergency
+      alert('Emergency: Call 911 (US) or your local emergency number immediately!');
+    }, () => {
+      alert('Emergency: Call 911 (US) or your local emergency number immediately!');
+    });
+  } else {
+    alert('Emergency: Call 911 (US) or your local emergency number immediately!');
+  }
+}
+
+function toggleAudio() {
+  const audioBtn = document.getElementById('protocol-audio-btn');
+  if (audioBtn) {
+    // Toggle audio playback for first-aid instructions
+    console.log('Toggle audio');
+  }
+}
+
+window.callEmergency = callEmergency;
+window.toggleAudio = toggleAudio;
+
 /* ── Auto-init ── */
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {

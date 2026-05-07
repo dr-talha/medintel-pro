@@ -579,9 +579,8 @@ const RecallsModule = (() => {
       </div>`;
 
     try {
-      // Use FDA Drug Enforcement API
-      const response = await fetch('https://api.fda.gov/drug/enforcement.json?limit=10&sort=report_date:desc');
-      const data = await response.json();
+      // Use FDA Drug Enforcement API via proxy
+      const data = await (await fetch('http://localhost:3001/api/fda/recalls')).json();
       const recalls = data.results || [];
       renderRecalls(recalls, container);
     } catch (err) {
@@ -788,8 +787,8 @@ function drugSearch(query) {
       Searching drugs…
     </div>`;
 
-  // Use RxNorm API for drug search
-  fetch(`https://rxnav.nlm.nih.gov/REST/drugs.json?name=${encodeURIComponent(query)}`)
+  // Use RxNorm API for drug search via proxy
+  fetch(`http://localhost:3001/api/rxnorm/drugs?name=${encodeURIComponent(query)}`)
     .then(response => response.json())
     .then(data => {
       const drugs = data.drugGroup?.conceptGroup || [];
@@ -868,8 +867,8 @@ function showDrugDetail(rxcui) {
   document.getElementById('drug-flags').innerHTML = '';
   document.getElementById('drug-meta').innerHTML = '';
 
-  // Fetch drug details from RxNorm
-  fetch(`https://rxnav.nlm.nih.gov/REST/RxTerms/rxcui/${rxcui}/allinfo.json`)
+  // Fetch drug details from RxNorm via proxy
+  fetch(`http://localhost:3001/api/rxnorm/drug/${rxcui}`)
     .then(response => response.json())
     .then(data => {
       const info = data.rxtermsProperties;
@@ -897,6 +896,14 @@ function showDrugResults() {
 
   detailEl.hidden = true;
   resultsEl.hidden = false;
+}
+
+function explainDrugWithAI() {
+  const drugName = document.getElementById('drug-name').textContent;
+  if (drugName && drugName !== 'Loading…') {
+    const message = `Explain the drug ${drugName} in detail`;
+    window.location.href = `/?chat=${encodeURIComponent(message)}`;
+  }
 }
 
 function initFilters() {
@@ -956,3 +963,8 @@ document.addEventListener('DOMContentLoaded', () => {
   InteractionChecker.init();
   RecallsModule.init();
 });
+
+/* ── Direct exports for onclick handlers ── */
+window.drugSearch = drugSearch;
+window.showDrugResults = showDrugResults;
+window.explainDrugWithAI = explainDrugWithAI;

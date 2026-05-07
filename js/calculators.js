@@ -848,4 +848,7 @@ window.MedIntel       = window.MedIntel || {};
 window.MedIntel.Calc  = CalcModule;
 window.CalcModule     = CalcModule;
 
+/* ── Direct exports for onclick handlers ── */
+window.computeAndShowResult = computeAndShowResult;
+
 document.addEventListener('DOMContentLoaded', initCalculators);

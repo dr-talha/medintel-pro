@@ -21,6 +21,14 @@ const API_KEYS = {
   // Add more as needed
 };
 
+/* ── Logger ── */
+const Logger = {
+  info: (message, ...args) => console.log(`[INFO] ${message}`, ...args),
+  warn: (message, ...args) => console.warn(`[WARN] ${message}`, ...args),
+  error: (message, ...args) => console.error(`[ERROR] ${message}`, ...args),
+  debug: (message, ...args) => console.debug(`[DEBUG] ${message}`, ...args),
+};
+
 /* ── Request State ── */
 const _pendingRequests = new Map();
 
@@ -190,9 +198,8 @@ const DiseaseAPI = {
    */
   async getHeatmap(disease = null, limit = 500) {
     try {
-      // Use disease.sh for COVID-19 data
-      const response = await fetch('https://disease.sh/v3/covid-19/countries');
-      const data = await response.json();
+      // Use disease.sh for COVID-19 data via proxy
+      const data = await apiFetch('/api/disease/countries');
 
       return data.map(country => ({
         country: country.country,
@@ -218,8 +225,7 @@ const DiseaseAPI = {
    */
   async getGlobalStats() {
     try {
-      const response = await fetch('https://disease.sh/v3/covid-19/all');
-      const data = await response.json();
+      const data = await apiFetch('/api/disease/all');
       return {
         total_cases: data.cases,
         total_deaths: data.deaths,
@@ -238,19 +244,14 @@ const DiseaseAPI = {
    */
   async getAlerts() {
     try {
-      // Use WHO RSS feed
-      const response = await fetch('https://www.who.int/rss-feeds/news-english.xml');
-      const text = await response.text();
-      // Parse RSS (simplified)
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(text, 'text/xml');
-      const items = xml.querySelectorAll('item');
-
-      return Array.from(items).slice(0, 5).map(item => ({
-        title: item.querySelector('title').textContent,
-        description: item.querySelector('description').textContent,
-        link: item.querySelector('link').textContent,
-        date: item.querySelector('pubDate').textContent,
+      // Use WHO RSS feed via proxy
+      const data = await apiFetch('/api/who/news');
+      const items = data.rss.channel[0].item || [];
+      return items.slice(0, 5).map(item => ({
+        title: item.title[0],
+        description: item.description[0],
+        link: item.link[0],
+        date: item.pubDate[0],
         source: 'WHO'
       }));
     } catch (err) {
@@ -264,8 +265,7 @@ const DiseaseAPI = {
    */
   async getCountry(countryCode, disease) {
     try {
-      const response = await fetch(`https://disease.sh/v3/covid-19/countries/${countryCode}`);
-      const data = await response.json();
+      const data = await apiFetch(`/api/disease/countries/${countryCode}`);
       return {
         country: data.country,
         cases: data.cases,
@@ -291,18 +291,14 @@ const BlogAPI = {
    */
   async getArticles(filters = {}) {
     try {
-      // Use WHO RSS as primary source
-      const response = await fetch('https://www.who.int/rss-feeds/news-english.xml');
-      const text = await response.text();
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(text, 'text/xml');
-      const items = xml.querySelectorAll('item');
-
-      return Array.from(items).map(item => ({
-        title: item.querySelector('title').textContent,
-        description: item.querySelector('description').textContent,
-        link: item.querySelector('link').textContent,
-        pubDate: item.querySelector('pubDate').textContent,
+      // Use WHO RSS as primary source via proxy
+      const data = await apiFetch('/api/who/news');
+      const items = data.rss.channel[0].item || [];
+      return items.map(item => ({
+        title: item.title[0],
+        description: item.description[0],
+        link: item.link[0],
+        pubDate: item.pubDate[0],
         source: 'WHO',
         specialty: 'public-health', // Default
         type: 'news'
@@ -318,19 +314,15 @@ const BlogAPI = {
    */
   async getBreakingAlert() {
     try {
-      // Check WHO emergency RSS
-      const response = await fetch('https://www.who.int/rss-feeds/emergency-english.xml');
-      const text = await response.text();
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(text, 'text/xml');
-      const items = xml.querySelectorAll('item');
-
+      // Check WHO emergency RSS via proxy
+      const data = await apiFetch('/api/who/emergency');
+      const items = data.rss.channel[0].item || [];
       if (items.length > 0) {
         const latest = items[0];
         return {
-          title: latest.querySelector('title').textContent,
-          description: latest.querySelector('description').textContent,
-          link: latest.querySelector('link').textContent,
+          title: latest.title[0],
+          description: latest.description[0],
+          link: latest.link[0],
           urgent: true
         };
       }
@@ -715,4 +707,5 @@ Object.assign(window.MedIntel, {
   UploadAPI,
   APIError,
   cachedGet,
+  Logger,
 });

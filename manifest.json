@@ -11,58 +11,10 @@
   "categories": ["medical", "health", "education"],
   "icons": [
     {
-      "src": "/icons/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
       "src": "/icons/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ],
   "screenshots": [
@@ -78,29 +30,25 @@
       "name": "Drug Lookup",
       "short_name": "Drugs",
       "description": "Search any drug by brand or generic name",
-      "url": "/drugs.html",
-      "icons": [{ "src": "/icons/shortcut-drug.png", "sizes": "96x96" }]
+      "url": "/drugs.html"
     },
     {
       "name": "First Aid",
       "short_name": "First Aid",
       "description": "Emergency protocols — works offline",
-      "url": "/first-aid.html",
-      "icons": [{ "src": "/icons/shortcut-firstaid.png", "sizes": "96x96" }]
+      "url": "/first-aid.html"
     },
     {
       "name": "Calculators",
       "short_name": "Calc",
       "description": "Medical calculators — GFR, CHADS₂-VASc, SOFA, BMI + more",
-      "url": "/calculators.html",
-      "icons": [{ "src": "/icons/shortcut-calc.png", "sizes": "96x96" }]
+      "url": "/calculators.html"
     },
     {
       "name": "Medical Quiz",
       "short_name": "Quiz",
       "description": "15,000+ questions across 10 specialties",
-      "url": "/quiz.html",
-      "icons": [{ "src": "/icons/shortcut-quiz.png", "sizes": "96x96" }]
+      "url": "/quiz.html"
     }
   ],
   "related_applications": [],

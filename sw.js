@@ -6,7 +6,7 @@
 
 'use strict';
 
-const CACHE_VERSION  = 'medintel-v2.0';
+const CACHE_VERSION  = 'medintel-v2.1';
 const STATIC_CACHE   = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE  = `${CACHE_VERSION}-dynamic`;
 const MAX_DYNAMIC    = 60; /* Max entries in dynamic cache */
@@ -41,6 +41,9 @@ const STATIC_ASSETS = [
   '/js/quiz.js',
   '/js/chat.js',
   '/js/map.js',
+  '/js/glossary.js',
+  '/js/blog.js',
+  '/js/trad.js',
   '/manifest.json',
   '/icons/favicon.svg',
 ];
@@ -49,7 +52,7 @@ const STATIC_ASSETS = [
 const DATA_ASSETS = [
   '/static/json/first-aid-protocols.json',
   '/static/json/calculators-config.json',
-  '/static/json/glossary-top10k.json',
+  // '/static/json/glossary-top10k.json', // TODO: Add when file exists
 ];
 
 /* ══════════════════════════════════════════
