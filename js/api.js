@@ -118,6 +118,25 @@ const api = {
 };
 
 /* ══════════════════════════════════════════
+   UTILITIES
+   ══════════════════════════════════════════ */
+
+/**
+ * Escape HTML special characters to prevent XSS
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHTML(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/* ══════════════════════════════════════════
    DRUG ENDPOINTS
    ══════════════════════════════════════════ */
 
@@ -332,32 +351,47 @@ const BlogAPI = {
     return null;
   },
 };
+
+/* ══════════════════════════════════════════
+   AI CHAT ENDPOINTS
+   ══════════════════════════════════════════ */
+
+const ChatAPI = {
   /**
    * Send a question to the RAG-powered AI
    * POST /api/chat
-   * body: { question, sessionId }
+   * body: { message, sessionId }
    */
-  ask(question, sessionId = null) {
+  ask(message, sessionId = null) {
     return api.post('/api/chat', {
-      question: question.trim(),
+      message: message.trim(),
       sessionId,
     });
   },
 
   /**
    * Get chat history for the current session (auth required)
-   * GET /api/chat/history/:sessionId
+   * GET /api/chat/history?sessionId=...
    */
   getHistory(sessionId) {
-    return api.get(`/api/chat/history/${sessionId}`);
+    return api.get(`/api/chat/history?sessionId=${encodeURIComponent(sessionId)}`);
+  },
+
+  /**
+   * Persist a chat message (opt-in history)
+   * POST /api/chat/save
+   */
+  saveMessage(payload) {
+    return api.post('/api/chat/save', payload);
   },
 
   /**
    * Submit feedback on an AI response
    * POST /api/chat/feedback
+   * body: { messageId, rating }
    */
-  submitFeedback(messageId, rating, comment = '') {
-    return api.post('/api/chat/feedback', { messageId, rating, comment });
+  submitFeedback(messageId, rating) {
+    return api.post('/api/chat/feedback', { messageId, rating });
   },
 
   /**
@@ -708,4 +742,21 @@ Object.assign(window.MedIntel, {
   APIError,
   cachedGet,
   Logger,
+  escapeHTML,
+});
+
+/* ══════════════════════════════════════════
+   GLOBAL ERROR BOUNDARY
+   ══════════════════════════════════════════ */
+
+window.addEventListener('unhandledrejection', (event) => {
+  Logger.error('Unhandled promise rejection:', event.reason);
+  // Prevent the default browser "Uncaught (in promise)" noise in production
+  if (window.location.hostname !== 'localhost') {
+    event.preventDefault();
+  }
+});
+
+window.addEventListener('error', (event) => {
+  Logger.error('Uncaught error:', event.message, 'at', event.filename, ':', event.lineno);
 });

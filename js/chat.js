@@ -184,12 +184,6 @@ function isLoggedIn() {
   return !!localStorage.getItem('medintel_token');
 }
 
-function escapeHTML(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
 function getMockResponse(question) {
   const q = question.toLowerCase();
   if (q.includes('metformin')) {
@@ -406,7 +400,7 @@ function buildMessageEl(msg) {
   const textEl = document.createElement('div');
   textEl.className = 'message__text';
   textEl.innerHTML = msg.role === 'ai'
-    ? DOMPurify.sanitize(formatAIResponse(msg.text))
+    ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(formatAIResponse(msg.text)) : escapeHTML(msg.text))
     : escapeHTML(msg.text);
   bubble.appendChild(textEl);
 
@@ -938,15 +932,6 @@ function hideProtocolDetail() {
 
 function initOfflineDetection() {
   // Handled in offline.js
-}
-
-function escapeHTML(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }
 
 function escapeAttr(str) {

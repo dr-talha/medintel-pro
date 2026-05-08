@@ -21,6 +21,7 @@ const STATIC_ASSETS = [
   '/quiz.html',
   '/disease-map.html',
   '/blog.html',
+  '/blog-post.html',
   '/glossary.html',
   '/trad-medicine.html',
   '/profile.html',
@@ -52,7 +53,7 @@ const STATIC_ASSETS = [
 const DATA_ASSETS = [
   '/static/json/first-aid-protocols.json',
   '/static/json/calculators-config.json',
-  // '/static/json/glossary-top10k.json', // TODO: Add when file exists
+  '/static/json/glossary-top10k.json',
 ];
 
 /* ══════════════════════════════════════════

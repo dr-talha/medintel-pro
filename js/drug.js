@@ -639,12 +639,6 @@ const RecallsModule = (() => {
    SHARED HELPERS
    ══════════════════════════════════════════ */
 
-function escapeHTML(str) {
-  return String(str ?? '')
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-}
-
 function escapeAttr(str) {
   return String(str ?? '').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
@@ -950,12 +944,6 @@ function loadRecallsCount() {
     badge.textContent = count;
     badge.style.display = count > 0 ? 'inline' : 'none';
   }
-}
-
-function escapeHTML(str) {
-  return String(str ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

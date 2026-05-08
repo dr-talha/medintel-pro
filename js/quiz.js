@@ -913,12 +913,6 @@ function skeletonGrid(n) {
   ).join('');
 }
 
-function escapeHTML(str) {
-  return String(str ?? '')
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-}
-
 function setEl(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;

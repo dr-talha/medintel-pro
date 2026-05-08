@@ -809,12 +809,6 @@ function bindCategoryNav() {
    HELPERS
    ══════════════════════════════════════════ */
 
-function escapeHTML(str) {
-  return String(str ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-}
-
 function escapeAttr(str) {
   return String(str ?? '').replace(/"/g,'&quot;');
 }
