@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import GlobalChat from '@/components/GlobalChat';
+import PWARegister from '@/components/PWARegister';
 
 export const metadata: Metadata = {
   title: 'MedIntel Pro',
@@ -12,6 +13,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-slate-50 text-slate-950 antialiased dark:bg-slate-950 dark:text-slate-50">
         {children}
+        <PWARegister />
         <GlobalChat />
       </body>
     </html>
