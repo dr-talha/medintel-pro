@@ -8,7 +8,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
-      "connect-src 'self' https://disease.sh https://xmart-api-public.who.int https://api.openai.com https://*.supabase.co wss://*.supabase.co",
+      "connect-src 'self' https://disease.sh https://xmart-api-public.who.int https://api.openai.com https://*.supabase.co wss://*.supabase.co https://api.tavily.com https://rxnav.nlm.nih.gov https://api.fda.gov",
       "worker-src 'self' blob:",
       "manifest-src 'self'",
       "frame-ancestors 'none'",
