@@ -10,46 +10,19 @@
   "lang": "en",
   "categories": ["medical", "health", "education"],
   "icons": [
-    {
-      "src": "/icons/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "/favicon.ico", "sizes": "16x16 32x32 48x48", "type": "image/x-icon", "purpose": "any" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "screenshots": [
-    {
-      "src": "/screenshots/home.png",
-      "sizes": "1280x800",
-      "type": "image/png",
-      "label": "MedIntel Pro home screen"
-    }
+    { "src": "/og-image.png", "sizes": "1200x630", "type": "image/png", "form_factor": "wide", "label": "MedIntel Pro social preview" },
+    { "src": "/screenshots/home.png", "sizes": "1280x800", "type": "image/png", "form_factor": "wide", "label": "MedIntel Pro home screen" }
   ],
   "shortcuts": [
-    {
-      "name": "Drug Lookup",
-      "short_name": "Drugs",
-      "description": "Search any drug by brand or generic name",
-      "url": "/drugs.html"
-    },
-    {
-      "name": "First Aid",
-      "short_name": "First Aid",
-      "description": "Emergency protocols — works offline",
-      "url": "/first-aid.html"
-    },
-    {
-      "name": "Calculators",
-      "short_name": "Calc",
-      "description": "Medical calculators — GFR, CHADS₂-VASc, SOFA, BMI + more",
-      "url": "/calculators.html"
-    },
-    {
-      "name": "Medical Quiz",
-      "short_name": "Quiz",
-      "description": "15,000+ questions across 10 specialties",
-      "url": "/quiz.html"
-    }
+    { "name": "Drug Lookup", "short_name": "Drugs", "description": "Search any drug by brand or generic name", "url": "/drugs" },
+    { "name": "First Aid", "short_name": "First Aid", "description": "Emergency protocols — works offline", "url": "/first-aid" },
+    { "name": "Calculators", "short_name": "Calc", "description": "Medical calculators — GFR, CHADS₂-VASc, SOFA, BMI + more", "url": "/calculators" },
+    { "name": "Medical Quiz", "short_name": "Quiz", "description": "15,000+ questions across 10 specialties", "url": "/quiz" }
   ],
   "related_applications": [],
   "prefer_related_applications": false
