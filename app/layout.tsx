@@ -4,6 +4,7 @@ import GlobalChat from '@/components/GlobalChat';
 import PWARegister from '@/components/PWARegister';
 import JsonLd from '@/components/JsonLd';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import Navigation from '@/components/Navigation';
 
 export const metadata: Metadata = {
   title: 'MedIntel Pro',
@@ -36,7 +37,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-screen bg-slate-50 text-slate-950 antialiased dark:bg-slate-950 dark:text-slate-50">
         <ThemeProvider>
           <JsonLd id="medintel-medical-webpage" schema={medicalWebPageSchema} />
-          {children}
+          <Navigation />
+          <main>{children}</main>
           <PWARegister />
           <GlobalChat />
         </ThemeProvider>
