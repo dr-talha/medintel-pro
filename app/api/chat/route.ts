@@ -1,6 +1,6 @@
 import { openai } from '@ai-sdk/openai';
 import { createClient } from '@supabase/supabase-js';
-import { embed, generateText, type ModelMessage } from 'ai';
+import { embed, generateText, type CoreMessage } from 'ai';
 
 export const runtime = 'nodejs';
 
@@ -116,8 +116,8 @@ export async function POST(request: Request) {
 
     const verifiedMatches = await searchVerifiedMedicalDatabase(latestUserMessage.content);
     const hasVerifiedContext = verifiedMatches.length > 0;
-    const conversationMessages: ModelMessage[] = messages.map((message) => ({
-      role: message.role,
+    const conversationMessages: CoreMessage[] = messages.map((message) => ({
+      role: message.role as 'user' | 'assistant',
       content: message.content,
     }));
 
